@@ -1,0 +1,13 @@
+{% extends 'main_page/base.html' %}
+
+{% load static %}
+{% block css_additional %}
+    <link rel="stylesheet" href="{% static 'main_page/css/main_page.css' %}">
+{% endblock %}
+
+
+{% block body %}
+    <div class="container">
+        <h1>Hello, world</h1>
+    </div>
+{% endblock %}
