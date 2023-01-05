@@ -8,19 +8,55 @@
 
 {% block body %}
     <div class="container">
+        <main class="px-3">
+            <h1 class="main-content">FIND.UA</h1>
+            <p class="lead">Допоможемо роботодавцям знайти працівників, а пошукачам -
+                знайти роботу своєї мрії.Просто розмісти вакансію у нас
+            </p>
+            <div class="form-group clearfix cut-top">
+                <div class="input-holder input-search-job">
+                    <input type="text" value="" class="form-control jobseeker-search" id="search" name="search"
+                           placeholder="Посада або компанія"
+                           autocomplete="off">
+                </div>
+                <div class="input-holder input-search-city">
+                    <input type="text" id="city-search" autocomplete="off" value="Київ" placeholder="Місто"
+                           class="js-main-region form-control " data-context="searchJob">
+                </div>
+                <button class="btn btn-primary" type="submit" id="sm-but">Знайти вакансії
+                </button>
+                <p id="example">Наприклад: <em>програміст</em>, <em>продажі</em> або <em>Сільпо</em></p>
+            </div>
+        </main>
+    </div>
+    <div class="container">
         <ul class="list-inline menu-my-img add-top">
-        <li class="i-by-category">
-            <a href="/jobs/by-category/">Вакансії за&nbsp;категоріями</a>
-        </li>
-        <li class="i-by-region">
-            <a href="/jobs/by-region/">Вакансії за&nbsp;містами</a>
-        </li>
-        <li class="i-students">
-            <a href="/jobs/students/">Робота для&nbsp;студентів</a>
-        </li>
-        <li class="i-by-company visible-xs-block">
-            <a href="/jobs/by-company/">Вакансії за&nbsp;компаніями</a>
-        </li>
-    </ul>
+            <li class="i-by-category">
+                <a href="/jobs/by-category/">Вакансії за&nbsp;категоріями</a>
+            </li>
+            <li class="i-by-region">
+                <a href="/jobs/by-region/">Вакансії за&nbsp;містами  </a>
+            </li>
+            <li class="i-students">
+                <a href="/jobs/students/">Робота для&nbsp;студентів</a>
+            </li>
+            <li class="i-by-company visible-xs-block">
+                <a href="/jobs/by-company/">Вакансії за&nbsp;компаніями</a>
+            </li>
+        </ul>
+    </div>
+    <div class="container">
+        <div class="card ">
+            <div class="row">
+                <div class="hidden-xs col-sm-8 col-md-9">
+                    <h2 class="icon-block">Розмістіть резюме</h2>
+                        <div class="icon-item icon-post-resume"></div>
+                        <p class="text-default">Роботодавці зможуть знайти вас і запропонувати хорошу роботу.</p>
+                </div>
+                <div class="col-sm-4 col-md-3">
+                    <a href="#" role="button" class="btn btn-info pull-right">Створити резюме</a>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

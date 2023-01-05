@@ -11,13 +11,14 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
+    background-color: #EBEBEB;
 }
 
 
 /* SEARCH-BOX */
 .search-box {
     position: absolute; /* Задання контейнеру із полем для пошуку плаваючу позицію */
-    top: 0.1%;
+    top: 0%;
     left: 65%;
     transform: translate(-50%,50%);
     background: #2f3640;
@@ -58,6 +59,7 @@ body {
     background: white;
 }
 
+/* INPUT FIELD FORM */
 .search-txt {
     border: none;
     background: none;
@@ -73,6 +75,7 @@ body {
 }
 
 
+/* FOOTER */
 .wrapper {
     height: 100%
 }
@@ -88,22 +91,128 @@ body {
     margin-top: -80px;
 }
 
+/* MAIN CONTENT */
+main {
+    max-width: 1500px;
+    background-color: #CACACA;
+    min-height: 220px;
+    margin-top: 0px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 20px;
+}
+
+main h1 {
+    text-align: center;
+    font-family: Helvetica;
+    font-weight: bold;
+    font-size: 45px;
+}
+
+.lead {
+    font-family: Helvetica;
+    font-size: 20px;
+    text-align: center;
+}
+
+/* INPUT FIELD FOR VACANCY SEARCH */
+#search {
+    width: 600px;
+    border-radius: 2px;
+    height: 42px;
+}
+#city-search {
+    margin-left: 10px;
+    height: 42px;
+    width: 400px;
+    border-radius: 2px;
+}
+
+/* SEARCH BUTTON FOR VACANCY */
+#sm-but {
+    max-width: 140px;
+    height: 42px;
+    margin-left: 10px;
+    font-size: 15px;
+    font-family: Helvetica;
+    border-radius: 2px;
+    background-color: #C74646;
+    border: none;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-left: 50px;
+}
+
+/* EXAMPLE TEXT UNDER INPUT FIELD */
+#example {
+    color: #FFF7F7;
+    font-size: 16px;
+}
+
+#example em {
+    text-decoration: underline;
+}
+
+.input-holder {
+    float: left;
+}
+
+/* VACANCY CATEGORY LIST */
 .list-inline {
     margin-top: 10px;
+    display: flex;
+    align-items: center
+    min-height: 120px;
+    background-color: white;
+    max-width: 1000px;
+    margin-left: 110px;
 }
 
 .list-inline li {
+    vertical-align: middle;
     text-decoration: none;
-    background: #E6E6E6;
+    background: #F2F2F2;
     margin: 5px;
-    width: 150px;
+    width: 250px;
     text-align: center;
-    height: 50px;
+    height: 80px;
     float: left;
-    border: 2px solid #C7C7C7;
+    border: 2px solid #E9E9E9;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .list-inline a {
     text-decoration: none;
-    margin-top: 0px;
+    line-height: 0px;
+}
+
+/* CARD REZUME */
+.card{
+    height: 100px;
+    max-width: 1000px;
+    margin-top: 30px;
+    margin-left: 110px;
+    border-radius: 0px;
+    display: grid;
+}
+
+h2 {
+    font-family: Helvetica;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.text-default {
+    padding: 5px;
+    font-family: Helvetica;
+}
+
+.col-sm-4 a{
+    background: #1DA601;
+    border: none;
+    margin-top: 30px;
+    font-family: sans-serif;
 }
