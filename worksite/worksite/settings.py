@@ -20,6 +20,8 @@ INSTALLED_APPS = [
     'main_page',
     'jobseeker',
 
+    'captcha'
+
 ]
 
 MIDDLEWARE = [
@@ -63,6 +65,8 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'jobseeker.JobseekerRegisterInfo'
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -89,3 +93,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

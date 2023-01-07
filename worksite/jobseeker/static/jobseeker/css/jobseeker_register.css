@@ -12,6 +12,7 @@ body {
     padding: 0;
     height: 100%;
     background-color: #EBEBEB;
+    font-family: Tahoma;
 }
 
 
@@ -84,4 +85,88 @@ body {
     box-sizing: border-box;
     min-height: 78%;
     padding-bottom: 90px;
+}
+
+#form-title{
+    cursor: help;
+    margin: 0;
+    font-weight: bold;
+    padding-bottom: 5px;
+    border-bottom: 3px solid #5200a5;
+}
+
+/* REGISTER FORM */
+#jobseeker-register {
+    margin: 0 auto;
+    /*background: rgba(0, 180, 255, 0.77);*/
+    background: #B0B0B0;
+    width: 480px;
+    margin-top: 10px;
+    height: 640px;
+    padding: 20px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.82);
+}
+
+.group{
+    margin: 5px;
+}
+
+/* FORM LABELS */
+label {
+    padding-left: 10px;
+}
+
+/* FORM INPUT FIELDS */
+.form-control {
+    height: 40px;
+    width: 400px;
+    border-radius: 20px/20px;
+    border: none;
+    padding-left: 15px;
+    font-size: 18px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.82);
+}
+
+.form-control:focus {
+    border: 2px solid #6c00ff;
+    transform: translateX(15px);
+    width: 385px;
+}
+
+/* FORM BUTTON */
+#register-submit {
+    cursor: pointer;
+    padding: 10px 30px;
+    height: 45px;
+    color: white;
+    background-color: #5200a5;
+    border: none;
+    font-size: 15px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.82);
+    margin-top: 5px;
+}
+
+#register-submit:hover {
+    opacity: .80;
+    font-weight: bold;
+    transform: scale(1.1);
+}
+
+/* CAPTCHA */
+
+.captcha {
+    max-width: 70px;
+    max-height: 50px;
+    min-height: 50px;
+    min-width: 70px;
+}
+#id_captcha_1 {
+    height: 40px;
+    width: 400px;
+    border-radius: 20px/20px;
+    border: none;
+    padding-left: 15px;
+    font-size: 18px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.82);
+    margin-top: 5px;
 }

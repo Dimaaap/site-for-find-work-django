@@ -6,5 +6,21 @@
 {% endblock %}
 
 {% block body %}
-    <h1>I`m a register page</h1>
+    <div class="container">
+        <form method="post" id="jobseeker-register">
+            <center><h1 id="form-title" title="Зареєструйтесь для подальшого розміщення вакансій">
+                Реєстрація пошукачів
+            </h1></center>
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="group">
+                {{ field.label }}
+                {{ field }}
+            </div>
+            {% endfor %}
+            <div class="group">
+                <center><button id="register-submit">Реєстрація</button></center>
+            </div>
+        </form>
+    </div>
 {% endblock %}
