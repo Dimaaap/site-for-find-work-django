@@ -7,6 +7,29 @@
 
 {% block body %}
     <div class="container">
+        {% if list_first_error %}
+            <div class="form-error">{{ list_first_error|escape }}</div>
+        {% endif %}
+         <!--{% if messages %}
+            {% for message in messages %}
+                {% if message.tags == success %}
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                    </div>
+                {% elif message.tags == error %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %} -->
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         <form method="post" id="jobseeker-register">
             <center><h1 id="form-title" title="Зареєструйтесь для подальшого розміщення вакансій">
                 Реєстрація пошукачів

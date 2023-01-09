@@ -3,14 +3,14 @@ from phonenumber_field.formfields import PhoneNumberField
 from captcha.fields import CaptchaField
 
 from .models import JobseekerRegisterInfo
+from .services.db_functions import select_all_fields_from_model, select_field_value_from_model
 
 
 class JobseekerRegisterForm(forms.ModelForm):
 
     class Meta:
         model = JobseekerRegisterInfo
-        fields = ['full_name', 'phone_number', 'email', 'hashed_password']
-
+        fields = ('full_name', 'phone_number', 'email', 'hashed_password')
     full_name = forms.CharField(label="Ваше прізвище та ім'я", max_length=255, min_length=6,
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
     phone_number = PhoneNumberField(label="Ваш номер телефону(буде потрібна SMS-верифікація)",
@@ -36,3 +36,9 @@ class JobseekerRegisterForm(forms.ModelForm):
         if password != password_repeat:
             raise forms.ValidationError('Значення паролів не співпадають')
         return password
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if email in select_field_value_from_model(JobseekerRegisterInfo, 'email', email):
+            raise forms.ValidationError('Користувач з таким email вже зареєстрований на сайті')
+        return email

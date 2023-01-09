@@ -170,3 +170,21 @@ label {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.82);
     margin-top: 5px;
 }
+
+/* ERRORS MESSAGES */
+.form-error {
+    background: #E90000;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #970000;
+}
+
+/* SUCCESS MESSAGES */
+.success {
+    background: #29C33E;
+    list-style-type: none;
+    border: 2px solid #1D8E2C;
+    max-width: 900px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
