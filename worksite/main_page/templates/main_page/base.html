@@ -24,7 +24,7 @@
                 </a>
                   <h1 class="company-title">FIND.UA</h1>
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                  <li><a href="#" class="nav-link px-2 text-secondary">Головна</a></li>
+                  <li><a href="/" class="nav-link px-2 text-secondary">Головна</a></li>
                   <li><a href="#" class="nav-link px-2 text-white">Про нас</a></li>
                   <li><a href="#" class="nav-link px-2 text-white">Знайти вакансії</a></li>
                   <li><a href="#" class="nav-link px-2 text-white">Розмістити вакансії</a></li>
@@ -37,8 +37,8 @@
                 </div>
 
                 <div class="text-end">
-                    <a href="#" class="btn btn-outline-light me-2">Ввійти</a>
-                    <a href="#" class="btn btn-warning">Приєднатись</a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-light me-2">Ввійти</a>
+                    <a href="{% url 'register' %}" class="btn btn-warning">Приєднатись</a>
                 </div>
               </>
             </div>
