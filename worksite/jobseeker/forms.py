@@ -67,10 +67,10 @@ class JobseekerLoginForm(forms.Form):
 
     def clean_password(self):
         password = self.cleaned_data['password']
-        email = self.cleaned_data['email']
+        email = self.clean_email()
         jobseeker = get_write_from_model(JobseekerRegisterInfo, 'email', email)
-        if not jobseeker or not check_password_hash(jobseeker.password, password):
-            raise forms.ValidationError('Не праильні логін або пароль')
+        if not jobseeker and not check_password_hash(jobseeker.password, password):
+            raise forms.ValidationError('Не правильний логін або пароль')
         return password
 
 

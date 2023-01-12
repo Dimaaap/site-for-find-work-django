@@ -2,6 +2,7 @@ import random
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.base_user import BaseUserManager
 from phonenumber_field.modelfields import PhoneNumberField
 from werkzeug.security import generate_password_hash
 
@@ -50,4 +51,3 @@ class Code(models.Model):
         code_string = generate_random_code()
         self.code = code_string
         super().save(*args, **kwargs)
-

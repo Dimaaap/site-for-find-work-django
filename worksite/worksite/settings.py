@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'captcha'
 
 ]
+AUTH_USER_MODEL = 'jobseeker.JobseekerRegisterInfo'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -65,7 +66,6 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'jobseeker.JobseekerRegisterInfo'
 
 AUTH_PASSWORD_VALIDATORS = [
     {

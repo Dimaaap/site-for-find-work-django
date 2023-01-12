@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout, login
+from django.contrib.auth.decorators import login_required
 
 from .forms import JobseekerRegisterForm, CodeVerifyForm, JobseekerLoginForm
 from .services.custom_errors import *
@@ -13,9 +13,16 @@ def jobseeker_login_view(request):
         form = JobseekerLoginForm(request.POST)
         context['form'] = form
         if form.is_valid():
-            pass
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            # jobseeker = authenticate(email=email, password=password)
+            # if jobseeker is not None:
+            #     login(request, jobseeker)
+            return redirect('logout')
         else:
-            pass
+            form_errors = form.errors.as_data()
+            custom_error = custom_error_service(form_errors)
+            context['list_first_error'] = custom_error
     else:
         form = JobseekerLoginForm()
         context['form'] = form
@@ -28,9 +35,9 @@ def jobseeker_register_view(request):
         form = JobseekerRegisterForm(request.POST)
         context['form'] = form
         if form.is_valid():
-            messages.success(request, 'Реєстрація успішна')
-            form.save()
-            return redirect('login')
+            user = form.save()
+            login(request, user)
+            return redirect('success')
         else:
             form_errors = form.errors.as_data()
             custom_error = custom_error_service(form_errors)
@@ -41,4 +48,12 @@ def jobseeker_register_view(request):
     return render(request, template_name='jobseeker/jobseeker_register.html', context=context)
 
 
+@login_required
+def success_register_view(request):
+    return render(request, template_name='jobseeker/jobseeker_success_register.html')
 
+
+@login_required
+def jobseeker_logout_view(request):
+    logout(request)
+    return render(request, template_name='jobseeker/jobseeker_logout.html')

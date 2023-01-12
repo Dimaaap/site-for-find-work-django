@@ -18,7 +18,7 @@
                 {% endfor %}
             </ul>
         {% endif %}
-        <form method="post">
+        <center><form method="post" id="login-form">
             <center><h1 id="form-login-title" title="Авторизуйтесь для подальшого пошуку роботи">
                 Авторизація
             </h1></center>
@@ -30,9 +30,12 @@
             </div>
             {% endfor %}
             <div class="group">
-                <center><button id="login-submit">Авторизація</button></center>
+                <center><button id="login-submit" class="btn btn-secondary">Авторизація</button></center>
             </div>
-        </form>
+            <div class="group">
+                <small><a href="{% url 'register' %}">Зареєструватись</a></small>
+            </div>
+        </form></center>
     </div>
 {% endblock %}
 

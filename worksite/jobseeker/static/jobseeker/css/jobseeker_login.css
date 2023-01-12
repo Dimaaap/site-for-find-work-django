@@ -82,6 +82,108 @@ body {
 
 .content {
     box-sizing: border-box;
-    min-height: 78%;
+    min-height: 75%;
     padding-bottom: 90px;
 }
+
+#login-form {
+    margin: 0 auto;
+    /*background: rgba(0, 180, 255, 0.77);*/
+    background: #B0B0B0;
+    width: 480px;
+    margin-top: 100px;
+    font-family: Helvetica;
+    height: 310px;
+    padding: 20px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.82);
+}
+
+#form-login-title {
+    font-family: Helvetica;
+    border-bottom: 3px solid #5200a5;
+    font-weight: bold;
+}
+
+.group{
+    margin: 5px;
+}
+
+/* FORM LABELS */
+label {
+    padding-left: 10px;
+}
+
+/* FORM INPUT FIELDS */
+.form-control {
+    height: 40px;
+    width: 400px;
+    border-radius: 20px/20px;
+    border: none;
+    padding-left: 15px;
+    font-size: 18px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.82);
+}
+
+.form-control:focus {
+    border: 2px solid #6c00ff;
+    transform: translateX(15px);
+    width: 385px;
+}
+
+/* FORM BUTTON */
+#login-submit {
+    cursor: pointer;
+    padding: 10px 30px;
+    height: 45px;
+    color: white;
+    background-color: #5200a5;
+    border: none;
+    font-size: 15px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.82);
+    margin-top: 5px;
+}
+
+#login-submit:hover {
+    opacity: .80;
+    font-weight: bold;
+    transform: scale(1.1);
+}
+
+/* CAPTCHA */
+/*
+.captcha {
+    max-width: 70px;
+    max-height: 50px;
+    min-height: 50px;
+    min-width: 70px;
+}
+#id_captcha_1 {
+    height: 40px;
+    width: 400px;
+    border-radius: 20px/20px;
+    border: none;
+    padding-left: 15px;
+    font-size: 18px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.82);
+    margin-top: 5px;
+}
+
+/* ERRORS MESSAGES */
+.form-error {
+    background: #E90000;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #970000;
+}
+
+/* SUCCESS MESSAGES */
+.success {
+    background: #29C33E;
+    list-style-type: none;
+    border: 2px solid #1D8E2C;
+    max-width: 900px;
+    margin-bottom: 10px;
+    padding: 10px;
+    margin-left: 300px;
+
+
