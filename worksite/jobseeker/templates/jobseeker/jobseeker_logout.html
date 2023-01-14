@@ -6,5 +6,12 @@
 {% endblock %}
 
 {% block body %}
-  <h1>Logout page</h1>
+  <div class="container">
+    <div class="alert alert-success" role="alert">
+      <h4 class="alert-heading">Розавторизація</h4>
+      <hr>
+      <p>Чудово!Ви успішно вийшли зі свого профілю.Щоб ввійти ще раз <a href="{% url 'login' %}">Авторизyйтесь</a>
+      Або поверніться на <a href="{% url 'index_page' %}">головну сторінку</a></p>
+    </div>
+  </div>
 {% endblock %}

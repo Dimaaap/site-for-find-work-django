@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from .forms import JobseekerRegisterForm, CodeVerifyForm, JobseekerLoginForm
+from .models import JobseekerRegisterInfo
 from .services.custom_errors import *
+from .services.db_functions import *
 
 
 def jobseeker_login_view(request):
@@ -15,10 +18,12 @@ def jobseeker_login_view(request):
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            # jobseeker = authenticate(email=email, password=password)
-            # if jobseeker is not None:
-            #     login(request, jobseeker)
-            return redirect('logout')
+            user = authenticate(request, email=email, password=password)
+            print(generate_password_hash(password))
+            if user:
+                print(user)
+            else:
+                print('USER IS NONE')
         else:
             form_errors = form.errors.as_data()
             custom_error = custom_error_service(form_errors)

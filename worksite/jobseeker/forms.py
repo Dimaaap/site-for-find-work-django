@@ -61,17 +61,17 @@ class JobseekerLoginForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        if not select_field_value_from_model(JobseekerRegisterInfo, 'email', email):
+        # if not select_field_value_from_model(JobseekerRegisterInfo, 'email', email):
+        if not JobseekerRegisterInfo.objects.filter(email=email):
             raise forms.ValidationError('Неправильно введені email або пароль')
         return email
 
-    def clean_password(self):
-        password = self.cleaned_data['password']
-        email = self.clean_email()
-        jobseeker = get_write_from_model(JobseekerRegisterInfo, 'email', email)
-        if not jobseeker and not check_password_hash(jobseeker.password, password):
-            raise forms.ValidationError('Не правильний логін або пароль')
-        return password
+    # def clean_password(self):
+    #     password = self.cleaned_data['password']
+    #     jobseeker = get_write_from_model(JobseekerRegisterInfo, 'email', email)
+    #     if not jobseeker and not check_password_hash(jobseeker.hashed_password, password):
+    #         raise forms.ValidationError('Не правильний логін або пароль')
+    #     return password
 
 
 class CodeVerifyForm(forms.ModelForm):

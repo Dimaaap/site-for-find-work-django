@@ -85,3 +85,17 @@ body {
     min-height: 75%;
     padding-bottom: 90px;
 }
+
+
+.alert {
+    margin-top: 150px;
+    max-width: 900px;
+    margin-left: 210px;
+    text-align: center;
+    font-family: Helvetica;
+    font-weight: bold;
+}
+
+.alert h4{
+    font-weight: bold;
+}

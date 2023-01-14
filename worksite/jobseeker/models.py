@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from phonenumber_field.modelfields import PhoneNumberField
-from werkzeug.security import generate_password_hash
+from django.contrib.auth.hashers import make_password
 
 
 def generate_random_code():
@@ -23,7 +23,6 @@ class JobseekerRegisterInfo(AbstractUser):
     phone_number = PhoneNumberField()
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=120)
-    hashed_password = models.CharField(max_length=200)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone_number', 'full_name', 'hashed_password']
@@ -31,18 +30,20 @@ class JobseekerRegisterInfo(AbstractUser):
     def __str__(self):
         return self.full_name
 
-    def save(self, *args, **kwargs):
-        try:
-            self.hashed_password = generate_password_hash(self.password)
-        except Exception as exp:
-            print(exp)
-            raise ValueError('Помилка додавання запису в БД')
-        super(JobseekerRegisterInfo, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     try:
+    #         self.hashed_password = self.password
+    #     except Exception as exp:
+    #         print(exp)
+    #         raise ValueError('Помилка додавання запису в БД')
+    #     super(JobseekerRegisterInfo, self).save(*args, **kwargs)
 
 
 class Code(models.Model):
     code = models.CharField(max_length=5, blank=True)
     user = models.OneToOneField(JobseekerRegisterInfo, on_delete=models.CASCADE)
+
+    # qwsc123@gmail.com
 
     def __str__(self):
         return self.code
