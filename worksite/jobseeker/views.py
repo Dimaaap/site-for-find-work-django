@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from .forms import JobseekerRegisterForm, CodeVerifyForm, JobseekerLoginForm
@@ -17,7 +18,7 @@ def jobseeker_login_view(request):
         context['form'] = form
         if form.is_valid():
             email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
+            password = make_password(form.cleaned_data['password'])
             user = authenticate(request, email=email, password=password)
             print(generate_password_hash(password))
             if user:
@@ -40,7 +41,14 @@ def jobseeker_register_view(request):
         form = JobseekerRegisterForm(request.POST)
         context['form'] = form
         if form.is_valid():
-            user = form.save()
+            full_name = form.cleaned_data['full_name']
+            phone_number = form.cleaned_data['phone_number']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            hash_password = make_password(password)
+            user = JobseekerRegisterInfo(full_name=full_name, phone_number=phone_number, email=email,
+                                         password=hash_password)
+            user.save()
             login(request, user)
             return redirect('success')
         else:
@@ -48,7 +56,7 @@ def jobseeker_register_view(request):
             custom_error = custom_error_service(form_errors)
             context['list_first_error'] = custom_error
     else:
-        form = JobseekerRegisterForm
+        form = JobseekerRegisterForm()
     context['form'] = form
     return render(request, template_name='jobseeker/jobseeker_register.html', context=context)
 

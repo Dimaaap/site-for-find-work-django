@@ -1,9 +1,9 @@
 import random
 
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils import timezone
 from django.contrib.auth.hashers import make_password
 
 
@@ -23,9 +23,11 @@ class JobseekerRegisterInfo(AbstractUser):
     phone_number = PhoneNumberField()
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=120)
+    password = models.CharField(max_length=150)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['phone_number', 'full_name', 'hashed_password']
+    EMAIL_FIELD = 'email'
+    REQUIRED_FIELDS = ['phone_number', 'full_name', 'password']
 
     def __str__(self):
         return self.full_name

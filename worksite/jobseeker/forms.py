@@ -8,10 +8,10 @@ from .services.db_functions import (select_all_fields_from_model, select_field_v
                                     get_write_from_model)
 
 
-class JobseekerRegisterForm(forms.ModelForm):
+class JobseekerRegisterForm(forms.Form):
     class Meta:
         model = JobseekerRegisterInfo
-        fields = ('full_name', 'phone_number', 'email', 'hashed_password')
+        fields = ('full_name', 'phone_number', 'email', 'password')
 
     full_name = forms.CharField(label="Ваше прізвище та ім'я", max_length=255, min_length=6,
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -19,14 +19,14 @@ class JobseekerRegisterForm(forms.ModelForm):
                                     region='UA', initial=380,
                                     widget=forms.NumberInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(label='Ваш Email', widget=forms.EmailInput(attrs={'class': 'form-control'}))
-    hashed_password = forms.CharField(label='Придумайте пароль', min_length=6,
-                                      widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(label='Придумайте пароль', min_length=6,
+                               widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     password_repeat = forms.CharField(label='Повторіть пароль', min_length=6,
                                       widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     captcha = CaptchaField(label='Введіть літери з картинки')
 
     def clean_password(self):
-        password = self.cleaned_data['hashed_password']
+        password = self.cleaned_data['password']
         if all([i.isdigit() for i in password]) or all([i.isalpha() for i in password]):
             raise forms.ValidationError('Надто простий пароль.'
                                         'Він має містити хоча б 6 символів,літери і цифри')
