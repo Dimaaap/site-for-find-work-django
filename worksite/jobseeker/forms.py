@@ -1,9 +1,9 @@
 from django import forms
+from django.contrib.auth.hashers import check_password
 from phonenumber_field.formfields import PhoneNumberField
 from captcha.fields import CaptchaField
-from werkzeug.security import check_password_hash
 
-from .models import JobseekerRegisterInfo, Code
+from .models import JobseekerRegisterInfo
 from .services.db_functions import (select_all_fields_from_model, select_field_value_from_model,
                                     get_write_from_model)
 
@@ -61,24 +61,7 @@ class JobseekerLoginForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        # if not select_field_value_from_model(JobseekerRegisterInfo, 'email', email):
-        if not JobseekerRegisterInfo.objects.filter(email=email):
-            raise forms.ValidationError('Неправильно введені email або пароль')
+        jobseeker = select_field_value_from_model(JobseekerRegisterInfo, 'email', email)
+        if not jobseeker:
+            raise forms.ValidationError('Неправильний email або пароль')
         return email
-
-    # def clean_password(self):
-    #     password = self.cleaned_data['password']
-    #     jobseeker = get_write_from_model(JobseekerRegisterInfo, 'email', email)
-    #     if not jobseeker and not check_password_hash(jobseeker.hashed_password, password):
-    #         raise forms.ValidationError('Не правильний логін або пароль')
-    #     return password
-
-
-class CodeVerifyForm(forms.ModelForm):
-    code = forms.CharField(label='Код,який ми надіслали вам у SMS',
-                           help_text='Введіть код,який ми надіслали на ваш телефон',
-                           widget=forms.TextInput(attrs={'class': 'form-control'}))
-
-    class Meta:
-        model = Code
-        fields = ('code',)

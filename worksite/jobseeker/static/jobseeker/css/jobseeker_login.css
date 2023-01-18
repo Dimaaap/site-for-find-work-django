@@ -176,14 +176,10 @@ label {
     border: 2px solid #970000;
 }
 
-/* SUCCESS MESSAGES */
-.success {
-    background: #29C33E;
-    list-style-type: none;
-    border: 2px solid #1D8E2C;
-    max-width: 900px;
-    margin-bottom: 10px;
-    padding: 10px;
-    margin-left: 300px;
+
+/* ALERT MESSAGES */
+.alert {
+    max-width: 600px;
+}
 
 

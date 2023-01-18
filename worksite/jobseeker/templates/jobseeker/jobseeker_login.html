@@ -12,11 +12,17 @@
             <div class="form-error">{{ list_first_error|escape }}</div>
         {% endif %}
         {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}></li>
-                {% endfor %}
-            </ul>
+            {% for message in messages %}
+                {% if message.tags != 'error' %}
+                    <div class="alert alert-{{ message.tags }} m-2" id="msg" role="alert">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger m-2" id="danger-msg" role="alert">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
         {% endif %}
         <center><form method="post" id="login-form">
             <center><h1 id="form-login-title" title="Авторизуйтесь для подальшого пошуку роботи">

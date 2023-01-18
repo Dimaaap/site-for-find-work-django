@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
-from werkzeug.security import check_password_hash, generate_password_hash
+from django.contrib import messages
 
-from .forms import JobseekerRegisterForm, CodeVerifyForm, JobseekerLoginForm
+from .forms import JobseekerRegisterForm, JobseekerLoginForm
 from .models import JobseekerRegisterInfo
 from .services.custom_errors import *
 from .services.db_functions import *
@@ -18,13 +18,13 @@ def jobseeker_login_view(request):
         context['form'] = form
         if form.is_valid():
             email = form.cleaned_data['email']
-            password = make_password(form.cleaned_data['password'])
-            user = authenticate(request, email=email, password=password)
-            print(generate_password_hash(password))
-            if user:
-                print(user)
+            password = form.cleaned_data['password']
+            jobseeker = authenticate(request, email=email, password=password)
+            if jobseeker:
+                login(request, jobseeker)
+                messages.success(request, 'Чудово!Ви успішно авторизувались на сайті')
             else:
-                print('USER IS NONE')
+                messages.error(request, 'Неправильний логін або пароль')
         else:
             form_errors = form.errors.as_data()
             custom_error = custom_error_service(form_errors)
@@ -49,7 +49,7 @@ def jobseeker_register_view(request):
             user = JobseekerRegisterInfo(full_name=full_name, phone_number=phone_number, email=email,
                                          password=hash_password)
             user.save()
-            login(request, user)
+            login(request, user, backend='jobseeker.authentication.WithoutPasswordBackend')
             return redirect('success')
         else:
             form_errors = form.errors.as_data()

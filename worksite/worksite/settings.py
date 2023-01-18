@@ -19,10 +19,17 @@ INSTALLED_APPS = [
 
     'main_page',
     'jobseeker',
+    'codes',
 
     'captcha'
 
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'jobseeker.authentication.WithoutPasswordBackend'
+]
+
 AUTH_USER_MODEL = 'jobseeker.JobseekerRegisterInfo'
 
 MIDDLEWARE = [
