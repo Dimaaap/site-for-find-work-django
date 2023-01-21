@@ -1,11 +1,9 @@
 from django import forms
-from django.contrib.auth.hashers import check_password
 from phonenumber_field.formfields import PhoneNumberField
 from captcha.fields import CaptchaField
 
 from .models import JobseekerRegisterInfo
-from .services.db_functions import (select_all_fields_from_model, select_field_value_from_model,
-                                    get_write_from_model)
+from .services.db_functions import select_field_value_from_model
 
 
 class JobseekerRegisterForm(forms.Form):
@@ -41,14 +39,16 @@ class JobseekerRegisterForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        if email in select_field_value_from_model(JobseekerRegisterInfo, 'email', email):
+        #if email in select_field_value_from_model(JobseekerRegisterInfo, 'email', email):
+        if email in JobseekerRegisterInfo.objects.filter(email=email):
             raise forms.ValidationError('Користувач з таким email вже зареєстрований на сайті')
         return email
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data['phone_number']
-        if phone_number in select_field_value_from_model(JobseekerRegisterInfo, 'phone_number',
-                                                         phone_number):
+        # if phone_number in select_field_value_from_model(JobseekerRegisterInfo, 'phone_number',
+        #                                                 phone_number):
+        if phone_number in JobseekerRegisterInfo.objects.filter(phone_number=phone_number):
             raise forms.ValidationError('Користувач з таким номером телефону вже зареєстрований на сайті')
         return phone_number
 

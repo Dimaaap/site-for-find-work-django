@@ -7,3 +7,4 @@ class CodesConfig(AppConfig):
 
     def ready(self):
         import codes.signals
+

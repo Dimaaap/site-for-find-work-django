@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
+from django.db.utils import IntegrityError
 
 from .forms import JobseekerRegisterForm, JobseekerLoginForm
 from .models import JobseekerRegisterInfo
@@ -21,8 +22,10 @@ def jobseeker_login_view(request):
             password = form.cleaned_data['password']
             jobseeker = authenticate(request, email=email, password=password)
             if jobseeker:
-                login(request, jobseeker)
+                # login(request, jobseeker)
+                request.session['pk'] = jobseeker.pk
                 messages.success(request, 'Чудово!Ви успішно авторизувались на сайті')
+                return redirect('code_verification')
             else:
                 messages.error(request, 'Неправильний логін або пароль')
         else:
@@ -48,9 +51,13 @@ def jobseeker_register_view(request):
             hash_password = make_password(password)
             user = JobseekerRegisterInfo(full_name=full_name, phone_number=phone_number, email=email,
                                          password=hash_password)
-            user.save()
-            login(request, user, backend='jobseeker.authentication.WithoutPasswordBackend')
-            return redirect('success')
+            try:
+                user.save()
+                login(request, user, backend='jobseeker.authentication.WithoutPasswordBackend')
+                return redirect('success')
+            except IntegrityError:
+                messages.error(request, 'Користувач з таким email вже зареєстрований на сайті')
+
         else:
             form_errors = form.errors.as_data()
             custom_error = custom_error_service(form_errors)
