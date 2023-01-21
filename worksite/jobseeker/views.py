@@ -5,10 +5,10 @@ from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.db.utils import IntegrityError
 
-from .forms import JobseekerRegisterForm, JobseekerLoginForm
+from .forms import JobseekerRegisterForm, JobseekerLoginForm, CodeForm
 from .models import JobseekerRegisterInfo
 from .services.custom_errors import *
-from .services.db_functions import *
+from .services.sms_codes import generate_code, send_sms_code
 
 
 def jobseeker_login_view(request):
@@ -22,10 +22,9 @@ def jobseeker_login_view(request):
             password = form.cleaned_data['password']
             jobseeker = authenticate(request, email=email, password=password)
             if jobseeker:
-                # login(request, jobseeker)
-                request.session['pk'] = jobseeker.pk
+                login(request, jobseeker)
                 messages.success(request, 'Чудово!Ви успішно авторизувались на сайті')
-                return redirect('code_verification')
+                return redirect('index_page')
             else:
                 messages.error(request, 'Неправильний логін або пароль')
         else:
@@ -49,15 +48,16 @@ def jobseeker_register_view(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             hash_password = make_password(password)
-            user = JobseekerRegisterInfo(full_name=full_name, phone_number=phone_number, email=email,
-                                         password=hash_password)
             try:
-                user.save()
-                login(request, user, backend='jobseeker.authentication.WithoutPasswordBackend')
-                return redirect('success')
+                code = generate_code()
+                request.session['full_name'] = full_name
+                request.session['phone_number'] = str(phone_number)
+                request.session['email'] = email
+                request.session['hash_password'] = hash_password
+                request.session['code'] = code
+                return redirect('code_verification')
             except IntegrityError:
                 messages.error(request, 'Користувач з таким email вже зареєстрований на сайті')
-
         else:
             form_errors = form.errors.as_data()
             custom_error = custom_error_service(form_errors)
@@ -66,6 +66,31 @@ def jobseeker_register_view(request):
         form = JobseekerRegisterForm()
     context['form'] = form
     return render(request, template_name='jobseeker/jobseeker_register.html', context=context)
+
+
+def verificate_number_view(request):
+    context = {'title': 'Підтвердження номеру'}
+    form = CodeForm(request.POST or None)
+    context['form'] = form
+    user = JobseekerRegisterInfo(full_name=request.session['full_name'],
+                                 phone_number=request.session['phone_number'],
+                                 email=request.session['email'],
+                                 password=request.session['hash_password'])
+    if user.email:
+        code = request.session.get('code')
+        if not request.POST:
+            send_sms_code(str(user.phone_number), code)
+        if form.is_valid():
+            num = form.cleaned_data.get('number')
+            if str(code) == num:
+                user.save()
+                login(request, user, backend='jobseeker.authentication.WithoutPasswordBackend')
+                return redirect('index_page')
+            else:
+                messages.error(request, 'Введено неправильний код')
+                return redirect('login')
+
+    return render(request, template_name='codes/code_verify.html', context=context)
 
 
 @login_required

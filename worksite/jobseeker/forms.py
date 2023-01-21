@@ -65,3 +65,10 @@ class JobseekerLoginForm(forms.Form):
         if not jobseeker:
             raise forms.ValidationError('Неправильний email або пароль')
         return email
+
+
+class CodeForm(forms.Form):
+
+    number = forms.CharField(label='Введіть код',
+                             max_length=5,
+                             widget=forms.TextInput(attrs={'class': 'form-control'}))

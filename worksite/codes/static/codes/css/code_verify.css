@@ -96,6 +96,7 @@ body {
 
 #form-title {
     font-family: Helvetica;
+    cursor: help;
     font-weight: bold;
     font-size: 30px;
     border-bottom: 4px solid #6F5DCB;
@@ -109,7 +110,7 @@ body {
 }
 
 .form-label {
-    font-family: Tahoma;
+    font-family: Helvetica;
     font-size: 18px;
     margin-left: 0px;
     margin-top: 3px;
@@ -117,4 +118,22 @@ body {
 
 .group {
     padding: 10px;
+}
+
+#verify-submit {
+    border: none;
+    background-color: #5200a5;
+    color: white;
+    padding: 10px;
+    font-family: Helvetica;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.82);
+    font-size: 15px;
+    height: 45px;
+    cursor: pointer;
+}
+
+#verify-submit:hover {
+    opacity: .80;
+    font-weight: bold;
+    transform: scale(1.1);
 }
