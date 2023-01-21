@@ -6,5 +6,25 @@
 {% endblock %}
 
 {% block body %}
-  <h1>I`m a code verification page</h1>
+  <div class="container">
+    <center><form method="post" id="verification-form">
+      {% csrf_token %}
+      <center>
+        <h1 id="form-title" title="Верифікація номеру телефону">
+          Верифікація мобільного
+        </h1>
+      </center>
+      {% for field in form %}
+        <div class="group">
+          <span class="form-label">
+            <label class="verification-form-label">{{ field.label }}</label>
+          </span>
+          {{ field }}
+        </div>
+      {% endfor %}
+      <div class="group">
+        <center><button id="verify-submit">Підтвердити</center>
+      </div>
+    </form></center>
+  </div>
 {% endblock %}

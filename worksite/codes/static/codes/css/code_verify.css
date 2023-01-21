@@ -85,3 +85,36 @@ body {
     min-height: 75%;
     padding-bottom: 90px;
 }
+
+#verification-form {
+    /*background: #FFFFFF;*/
+    max-width: 400px;
+    margin-top: 200px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.82);
+    border-radius: 10px 10px;
+}
+
+#form-title {
+    font-family: Helvetica;
+    font-weight: bold;
+    font-size: 30px;
+    border-bottom: 4px solid #6F5DCB;
+}
+
+.form-control {
+    border: none;
+    max-width: 300px;
+    font-size: 18px;
+    font-family: Helvetica;
+}
+
+.form-label {
+    font-family: Tahoma;
+    font-size: 18px;
+    margin-left: 0px;
+    margin-top: 3px;
+}
+
+.group {
+    padding: 10px;
+}
