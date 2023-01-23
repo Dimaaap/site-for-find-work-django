@@ -1,9 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.db.utils import IntegrityError
+from django.urls import reverse
+from twilio.base.exceptions import TwilioRestException
 
 from .forms import JobseekerRegisterForm, JobseekerLoginForm, CodeForm
 from .models import JobseekerRegisterInfo
@@ -50,13 +52,10 @@ def jobseeker_register_view(request):
             hash_password = make_password(password)
             try:
                 code = generate_code()
-                request.session['full_name'] = full_name
-                request.session['phone_number'] = str(phone_number)
-                request.session['email'] = email
-                request.session['hash_password'] = hash_password
-                request.session['code'] = code
+                session_tuple = (full_name, str(phone_number), email, hash_password, code)
+                request.session['session_tuple'] = session_tuple
                 return redirect('code_verification')
-            except IntegrityError:
+            except (IntegrityError, TwilioRestException):
                 messages.error(request, 'Користувач з таким email вже зареєстрований на сайті')
         else:
             form_errors = form.errors.as_data()
@@ -70,27 +69,38 @@ def jobseeker_register_view(request):
 
 def verificate_number_view(request):
     context = {'title': 'Підтвердження номеру'}
+    if request.user.is_authenticated:
+        return redirect('index_page', permanent=True)
     form = CodeForm(request.POST or None)
+    session_tuple = request.session['session_tuple']
     context['form'] = form
-    user = JobseekerRegisterInfo(full_name=request.session['full_name'],
-                                 phone_number=request.session['phone_number'],
-                                 email=request.session['email'],
-                                 password=request.session['hash_password'])
+    user = JobseekerRegisterInfo(full_name=session_tuple[0],
+                                 phone_number=session_tuple[1],
+                                 email=session_tuple[2],
+                                 password=session_tuple[3])
     if user.email:
-        code = request.session.get('code')
+        code = request.session.get('session_tuple')[-1]
         if not request.POST:
-            send_sms_code(str(user.phone_number), code)
+            try:
+                send_sms_code(str(user.phone_number), code)
+            except TwilioRestException:
+                messages.error(request, 'Введеного вами номера не існує')
         if form.is_valid():
             num = form.cleaned_data.get('number')
             if str(code) == num:
                 user.save()
                 login(request, user, backend='jobseeker.authentication.WithoutPasswordBackend')
-                return redirect('index_page')
+                return redirect(reverse('jobseeker_profile', args=user.username))
             else:
                 messages.error(request, 'Введено неправильний код')
-                return redirect('login')
 
-    return render(request, template_name='codes/code_verify.html', context=context)
+    return render(request, template_name='jobseeker/code_verify.html', context=context)
+
+
+def jobseeker_profile_view(request, username):
+    jobseeker = get_object_or_404(JobseekerRegisterInfo, username)
+    context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name}
+    return render(request, template_name='jobseeker/jobseeker_profile.html', context=context)
 
 
 @login_required

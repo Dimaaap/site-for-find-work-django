@@ -39,16 +39,14 @@ class JobseekerRegisterForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        #if email in select_field_value_from_model(JobseekerRegisterInfo, 'email', email):
-        if email in JobseekerRegisterInfo.objects.filter(email=email):
+        if email in select_field_value_from_model(JobseekerRegisterInfo, 'email', email):
             raise forms.ValidationError('Користувач з таким email вже зареєстрований на сайті')
         return email
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data['phone_number']
-        # if phone_number in select_field_value_from_model(JobseekerRegisterInfo, 'phone_number',
-        #                                                 phone_number):
-        if phone_number in JobseekerRegisterInfo.objects.filter(phone_number=phone_number):
+        if phone_number in select_field_value_from_model(JobseekerRegisterInfo, 'phone_number',
+                                                         phone_number):
             raise forms.ValidationError('Користувач з таким номером телефону вже зареєстрований на сайті')
         return phone_number
 
@@ -68,7 +66,6 @@ class JobseekerLoginForm(forms.Form):
 
 
 class CodeForm(forms.Form):
-
     number = forms.CharField(label='Введіть код',
                              max_length=5,
                              widget=forms.TextInput(attrs={'class': 'form-control'}))
