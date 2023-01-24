@@ -4,16 +4,18 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.db.utils import IntegrityError
-from django.urls import reverse
 from twilio.base.exceptions import TwilioRestException
 
 from .forms import JobseekerRegisterForm, JobseekerLoginForm, CodeForm
 from .models import JobseekerRegisterInfo
 from .services.custom_errors import *
 from .services.sms_codes import generate_code, send_sms_code
+from .services.db_functions import create_user_login
 
 
 def jobseeker_login_view(request):
+    if request.user.is_authenticated:
+        return redirect('index_page', permanent=True)
     title = 'Авторизація'
     context = {'title': title}
     if request.method == 'POST':
@@ -40,6 +42,8 @@ def jobseeker_login_view(request):
 
 
 def jobseeker_register_view(request):
+    if request.user.is_authenticated:
+        return redirect('index_page', permanent=True)
     context = {'title': 'Реєстрація'}
     if request.method == 'POST':
         form = JobseekerRegisterForm(request.POST)
@@ -74,10 +78,12 @@ def verificate_number_view(request):
     form = CodeForm(request.POST or None)
     session_tuple = request.session['session_tuple']
     context['form'] = form
+    user_login = create_user_login(session_tuple[2])
     user = JobseekerRegisterInfo(full_name=session_tuple[0],
                                  phone_number=session_tuple[1],
                                  email=session_tuple[2],
-                                 password=session_tuple[3])
+                                 password=session_tuple[3],
+                                 login=user_login)
     if user.email:
         code = request.session.get('session_tuple')[-1]
         if not request.POST:
@@ -89,17 +95,20 @@ def verificate_number_view(request):
             num = form.cleaned_data.get('number')
             if str(code) == num:
                 user.save()
+                request.session['login'] = user_login
                 login(request, user, backend='jobseeker.authentication.WithoutPasswordBackend')
-                return redirect(reverse('jobseeker_profile', args=user.username))
+                return redirect('jobseeker_profile', user.login)
             else:
                 messages.error(request, 'Введено неправильний код')
 
     return render(request, template_name='jobseeker/code_verify.html', context=context)
 
 
-def jobseeker_profile_view(request, username):
-    jobseeker = get_object_or_404(JobseekerRegisterInfo, username)
-    context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name}
+@login_required
+def jobseeker_profile_view(request, login):
+    jobseeker = JobseekerRegisterInfo.objects.get(login=login)
+
+    context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name, 'login': jobseeker.login}
     return render(request, template_name='jobseeker/jobseeker_profile.html', context=context)
 
 

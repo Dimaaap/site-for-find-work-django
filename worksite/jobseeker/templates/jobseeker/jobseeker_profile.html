@@ -1,4 +1,4 @@
-{% extends 'index_page/base.html' %}
+{% extends 'main_page/base.html' %}
 
 {% load static %}
 {% block css_additional %}
@@ -6,5 +6,7 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Hello, {{ full_name }}</h1>
+    <div class="container">
+        <h1>Hello, {{ full_name }}</h1>
+    </div>
 {% endblock %}

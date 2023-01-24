@@ -12,7 +12,7 @@ class JobseekerRegisterInfo(AbstractUser):
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=120)
     password = models.CharField(max_length=150)
-    login = models.CharField(max_length=100, default='user_without_login')
+    login = models.CharField(max_length=100, default=None)
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
@@ -21,7 +21,11 @@ class JobseekerRegisterInfo(AbstractUser):
     def __str__(self):
         return self.full_name
 
-    def save(self, *args, **kwargs):
-        email_name = str(self.email).split('@')[0]
-        self.login= str(str(email_name) + str(randint(1, 100)))
-        super().save(*args, **kwargs)
+
+class JobseekerAdditionalInfo(models.Model):
+
+    jobseeker = models.OneToOneField(JobseekerRegisterInfo, on_delete=models.CASCADE)
+    photo = models.ImageField(upload_to='avatars/%Y/%m/%d')
+    header = models.CharField(max_length=400)
+
+
