@@ -107,7 +107,6 @@ def verificate_number_view(request):
 @login_required
 def jobseeker_profile_view(request, login):
     jobseeker = JobseekerRegisterInfo.objects.get(login=login)
-
     context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name, 'login': jobseeker.login}
     return render(request, template_name='jobseeker/jobseeker_profile.html', context=context)
 

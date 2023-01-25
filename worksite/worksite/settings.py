@@ -20,7 +20,6 @@ INSTALLED_APPS = [
 
     'main_page',
     'jobseeker',
-    'codes',
 
     'captcha'
 

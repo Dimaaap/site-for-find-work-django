@@ -2,7 +2,7 @@ from django import forms
 from phonenumber_field.formfields import PhoneNumberField
 from captcha.fields import CaptchaField
 
-from .models import JobseekerRegisterInfo
+from .models import JobseekerRegisterInfo, JobseekerProfileInfo
 from .services.db_functions import select_field_value_from_model
 
 
@@ -47,7 +47,8 @@ class JobseekerRegisterForm(forms.Form):
         phone_number = self.cleaned_data['phone_number']
         if phone_number in select_field_value_from_model(JobseekerRegisterInfo, 'phone_number',
                                                          phone_number):
-            raise forms.ValidationError('Користувач з таким номером телефону вже зареєстрований на сайті')
+            raise forms.ValidationError('Користувач з таким номером телефону вже '
+                                        'зареєстрований на сайті')
         return phone_number
 
 
@@ -69,3 +70,18 @@ class CodeForm(forms.Form):
     number = forms.CharField(label='Введіть код',
                              max_length=5,
                              widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+
+class ProfileInfoForm(forms.ModelForm):
+    class Meta:
+        model = JobseekerProfileInfo
+        fields = ('photo', 'header', 'telegram', 'linkedin', 'git_hub', 'cv')
+
+    photo = forms.ImageField()
+    header = forms.CharField(help_text='Введіть трохи інформації про себе',
+                             widget=forms.Textarea())
+    # telegram = forms.URLField(widget=forms.URLInput(attrs={'class': 'form-control'}))
+    # linkedin = forms.URLField(widgret=forms.URLInput(attrs={'class': 'form-cin'}))
+    telegram = linkedin = git_hub = forms.URLField(widget=forms.URLInput(attrs=
+                                                                         {'class': 'form-control'}))
+    cv = forms.FileField()
