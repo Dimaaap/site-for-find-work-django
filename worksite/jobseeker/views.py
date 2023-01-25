@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.db.utils import IntegrityError
 from twilio.base.exceptions import TwilioRestException
 
-from .forms import JobseekerRegisterForm, JobseekerLoginForm, CodeForm, ProfileInfoForm
+from .forms import JobseekerRegisterForm, JobseekerLoginForm, CodeForm
 from .models import JobseekerRegisterInfo
 from .services.custom_errors import *
 from .services.sms_codes import generate_code, send_sms_code
@@ -104,16 +104,16 @@ def verificate_number_view(request):
     return render(request, template_name='jobseeker/code_verify.html', context=context)
 
 
-@login_required
-def jobseeker_profile_view(request, login):
-    jobseeker = JobseekerRegisterInfo.objects.get(login=login)
-    context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name,
-               'login': jobseeker.login}
-    if request.method == 'POST':
-        form = ProfileInfoForm(request.POST)
-        context['form'] = form
-    context['form'] = ProfileInfoForm()
-    return render(request, template_name='jobseeker/jobseeker_profile.html', context=context)
+# @login_required
+# def jobseeker_profile_view(request, login):
+#     jobseeker = JobseekerRegisterInfo.objects.get(login=login)
+#     context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name,
+#                'login': jobseeker.login}
+#     if request.method == 'POST':
+#         form = ProfileInfoForm(request.POST)
+#         context['form'] = form
+#     context['form'] = ProfileInfoForm()
+#     return render(request, template_name='jobseeker/jobseeker_profile.html', context=context)
 
 
 @login_required

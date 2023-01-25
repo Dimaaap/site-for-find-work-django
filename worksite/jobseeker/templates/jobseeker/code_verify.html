@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block body %}
-  {% include 'jobseeker/_include/flash-messages.html' with messages=messages %}
+  {% include '_include/flash-messages.html' with messages=messages %}
   <div class="container">
     <center><form method="post" id="verification-form">
       {% csrf_token %}

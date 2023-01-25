@@ -1,5 +1,3 @@
-from random import randint
-
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
@@ -20,17 +18,3 @@ class JobseekerRegisterInfo(AbstractUser):
 
     def __str__(self):
         return self.full_name
-
-
-class JobseekerProfileInfo(models.Model):
-
-    jobseeker = models.OneToOneField(JobseekerRegisterInfo, on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to='avatars/%Y/%m/%d')
-    header = models.TextField(blank=True)
-    telegram = models.URLField(blank=True, max_length=200)
-    linkedin = models.URLField(blank=True)
-    git_hub = models.URLField(blank=True)
-    cv = models.FileField(upload_to='cv/%Y/%m/%d')
-
-    def __str__(self):
-        return self.jobseeker

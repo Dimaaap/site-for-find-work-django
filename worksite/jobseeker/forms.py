@@ -2,7 +2,7 @@ from django import forms
 from phonenumber_field.formfields import PhoneNumberField
 from captcha.fields import CaptchaField
 
-from .models import JobseekerRegisterInfo, JobseekerProfileInfo
+from .models import JobseekerRegisterInfo
 from .services.db_functions import select_field_value_from_model
 
 
@@ -70,18 +70,3 @@ class CodeForm(forms.Form):
     number = forms.CharField(label='Введіть код',
                              max_length=5,
                              widget=forms.TextInput(attrs={'class': 'form-control'}))
-
-
-class ProfileInfoForm(forms.ModelForm):
-    class Meta:
-        model = JobseekerProfileInfo
-        exclude = ['jobseeker']
-
-    photo = forms.ImageField(label='Завантажте своє фото')
-    header = forms.CharField(label='Напишіть декілька слів про себе',
-                             help_text='Введіть трохи інформації про себе',
-                             widget=forms.Textarea())
-    telegram = linkedin = forms.URLField(widget=forms.URLInput(attrs={'class': 'form-control'}))
-    git_hub = forms.URLField(label='GitHib', widget=forms.URLInput(attrs={'class': 'form-control'}))
-
-    cv = forms.FileField(label='Прикріпіть ваш файл з резюме')

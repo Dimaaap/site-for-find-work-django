@@ -10,7 +10,7 @@
         {% if list_first_error %}
             <div class="form-error">{{ list_first_error|escape }}</div>
         {% endif %}
-        {% include 'jobseeker/_include/flash-messages.html' with messages=messages %}
+        {% include '_include/flash-messages.html' with messages=messages %}
         <form method="post" id="jobseeker-register">
             <center><h1 id="form-title" title="Зареєструйтесь для подальшого розміщення вакансій">
                 Реєстрація пошукачів

@@ -2,20 +2,19 @@
 
 {% load static %}
 {% block css_additional %}
-    <link rel="stylesheet" href="{% static 'jobseeker/css/jobseeker_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'personal_profile/css/jobseeker_profile.css' %}">
 {% endblock %}
 
 {% block body %}
     <div class="container">
-        <h1 class="profile-title">Мій акаунт</h1>
+        <h1 id="profile-title">Мій акаунт</h1>
         {% if list_first_error %}
             <div class="form-error">{{ list_first_error|escape }}</div>
         {% endif %}
         {% if messages %}
-            {% include '_include/flash_messages.html' with messages=messages %}
+            {% include 'jobseeker/_include/flash_messages.html' with messages=messages %}
         {% endif %}
         <form method="post" id="add-jobseeker-info-form" enctype="multipart/form-data">
-            <h1></h1>
             {% csrf_token %}
             {% for field in form %}
                 <div class="group">

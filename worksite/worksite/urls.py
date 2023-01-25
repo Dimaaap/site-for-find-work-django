@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main_page.urls')),
     path('jobseeker', include('jobseeker.urls')),
+    path('profile', include('personal_profile.urls'))
 ]
 urlpatterns += [
     path('captcha/', include('captcha.urls'))

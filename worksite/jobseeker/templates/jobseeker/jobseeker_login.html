@@ -11,7 +11,7 @@
         {% if list_first_error %}
             <div class="form-error">{{ list_first_error|escape }}</div>
         {% endif %}
-        {% include 'jobseeker/_include/flash-messages.html' with messages=messages %}
+        {% include '_include/flash-messages.html' with messages=messages %}
         <center><form method="post" id="login-form">
             <center><h1 id="form-login-title" title="Авторизуйтесь для подальшого пошуку роботи">
                 Авторизація
