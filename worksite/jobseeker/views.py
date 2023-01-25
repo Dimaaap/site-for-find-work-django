@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.db.utils import IntegrityError
 from twilio.base.exceptions import TwilioRestException
 
-from .forms import JobseekerRegisterForm, JobseekerLoginForm, CodeForm
+from .forms import JobseekerRegisterForm, JobseekerLoginForm, CodeForm, ProfileInfoForm
 from .models import JobseekerRegisterInfo
 from .services.custom_errors import *
 from .services.sms_codes import generate_code, send_sms_code
@@ -107,7 +107,12 @@ def verificate_number_view(request):
 @login_required
 def jobseeker_profile_view(request, login):
     jobseeker = JobseekerRegisterInfo.objects.get(login=login)
-    context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name, 'login': jobseeker.login}
+    context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name,
+               'login': jobseeker.login}
+    if request.method == 'POST':
+        form = ProfileInfoForm(request.POST)
+        context['form'] = form
+    context['form'] = ProfileInfoForm()
     return render(request, template_name='jobseeker/jobseeker_profile.html', context=context)
 
 

@@ -75,13 +75,13 @@ class CodeForm(forms.Form):
 class ProfileInfoForm(forms.ModelForm):
     class Meta:
         model = JobseekerProfileInfo
-        fields = ('photo', 'header', 'telegram', 'linkedin', 'git_hub', 'cv')
+        exclude = ['jobseeker']
 
-    photo = forms.ImageField()
-    header = forms.CharField(help_text='Введіть трохи інформації про себе',
+    photo = forms.ImageField(label='Завантажте своє фото')
+    header = forms.CharField(label='Напишіть декілька слів про себе',
+                             help_text='Введіть трохи інформації про себе',
                              widget=forms.Textarea())
-    # telegram = forms.URLField(widget=forms.URLInput(attrs={'class': 'form-control'}))
-    # linkedin = forms.URLField(widgret=forms.URLInput(attrs={'class': 'form-cin'}))
-    telegram = linkedin = git_hub = forms.URLField(widget=forms.URLInput(attrs=
-                                                                         {'class': 'form-control'}))
-    cv = forms.FileField()
+    telegram = linkedin = forms.URLField(widget=forms.URLInput(attrs={'class': 'form-control'}))
+    git_hub = forms.URLField(label='GitHib', widget=forms.URLInput(attrs={'class': 'form-control'}))
+
+    cv = forms.FileField(label='Прикріпіть ваш файл з резюме')
