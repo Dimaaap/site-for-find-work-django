@@ -8,14 +8,15 @@ class ProfileInfoForm(forms.ModelForm):
         model = JobseekerProfileInfo
         exclude = ['jobseeker', 'active_search', 'photo']
 
-    # photo = forms.ImageField(label='Завантажте своє фото', widget=forms.FileInput(attrs={'class': 'form-file'}))
-    #header = forms.CharField(label='Напишіть декілька слів про себе',
-                             #help_text='Введіть трохи інформації про себе',
-                             #widget=forms.Textarea(attrs={'class': 'form-header-input'}))
-
     expected_job = forms.CharField(label='Вкажіть вашу очікувану роботу',
                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
-    telegram = linkedin = forms.URLField(widget=forms.URLInput(attrs={'class': 'form-control'}))
-    git_hub = forms.URLField(label='GitHib', widget=forms.URLInput(attrs={'class': 'form-control'}))
+    telegram = forms.URLField(widget=forms.URLInput(attrs={'class': 'form-control'}))
+    linkedin = forms.URLField(label='LinkedIn', widget=forms.URLInput(attrs={'class': 'form-control'}))
+    git_hub = forms.URLField(label='GitHub', widget=forms.URLInput(attrs={'class': 'form-control'}))
 
     cv = forms.FileField(label='Прикріпіть ваш файл з резюме')
+
+
+class ProfilePhotoForm(forms.Form):
+    photo = forms.ImageField(label='Завантажити нове фото', widget=forms.FileInput(attrs={'class': 'user-avatar'}))
+

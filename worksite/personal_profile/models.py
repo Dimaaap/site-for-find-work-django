@@ -5,7 +5,8 @@ from jobseeker.models import JobseekerRegisterInfo
 
 class JobseekerProfileInfo(models.Model):
     jobseeker = models.OneToOneField(JobseekerRegisterInfo, on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to='avatars/%Y/%m/%d')
+    photo = models.ImageField(upload_to='avatars/%Y/%m/%d',
+                              default='static/personal_profile/images/default_avatar.png')
     expected_job = models.CharField(max_length=400, blank=True)
     telegram = models.URLField(blank=True, max_length=200)
     linkedin = models.URLField(blank=True)

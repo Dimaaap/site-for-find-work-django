@@ -14,21 +14,53 @@
         {% if messages %}
             {% include 'jobseeker/_include/flash_messages.html' with messages=messages %}
         {% endif %}
-        <form method="post" id="add-jobseeker-info-form" enctype="multipart/form-data">
-            {% csrf_token %}
-            {% for field in form %}
-                <div class="group">
-                    {{ field.label }}
-                    {{ field }}
-                </div>
-            {% endfor %}
-            <div class="group">
-                <center>
-                    <button id="add-information" class="btn btn-secondary">
-                        Додати дані
-                    </button>
-                </center>
+        <div class="pre-form-title-wrapper">
+            <p class="pre-form-title">Ваші персональні дані побачать лише ті, кому ви відкриєте доступ</p>
+        </div>
+        <div class="main-row">
+            <div class="main-column">
+                <form method="post" id="add-jobseeker-info-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        {% for field in form %}
+                            <div class="group">
+                                <div class="column">
+                                    <label class="form-label">{{ field.label }}</label>
+                                </div>
+                                <div class="column">
+                                    {{ field }}
+                                </div>
+                                {% if field.label == 'LinkedIn' %}
+                                <p>
+                                    <small class="linkedin-field-small">
+                                        На приклад,
+                                        <a href="https://www.linkedin.com/in/dproc/" target="_blank">
+                                            https://www.linkedin.com/in/dproc/
+                                        </a>
+                                    </small>
+                                </p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <div class="group">
+                            <center>
+                                <button id="add-information" class="btn btn-secondary">
+                                    Додати дані
+                                </button>
+                            </center>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
+            <div class="main-column">
+                <form method="post" id="jobseeker-avatar" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="image-container">
+                        {{ photo_form.label }}
+                        {{ photo }}
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -86,16 +86,75 @@ body {
     padding-bottom: 90px;
 }
 
+/* PRE-FORM TEXT */
+.pre-form-title {
+    font-family: 'Rubik';
+    border-bottom: 1.4px solid #ECECEC;
+}
+
 
 /* FORM */
 #add-jobseeker-info-form {
-    margin: 0 auto;
+    max-width: 1000px;
+    margin-left: 10px;
+    margin-top: 30px;
+
 }
 
 #profile-title {
-    font-family: 'Ubuntu Mono', monospace;
+    font-family: 'Rubik', sans-serif;
     font-weight: bold;
     font-size: 35px;
+}
+
+
+/* LABELS AND INPUTS POSITION */
+
+.form-label {
+    font-family: 'Rubik';
+}
+
+.column {
+    float:left;
+    width: 35%;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.group {
+    margin-top: 15px;
+    padding: 5px;
+}
+
+#add-jobseeker-info-form input {
+    max-width: 400px;
+    margin-left: 30px;
+}
+
+/* FORM-BUTTON */
+#add-information {
+    background: blue;
+    color: white;
+    border: none;
+    height: 50px;
+    font-style: 'Rubik';
+    font-size: 20px;
+    padding: 5px;
+    margin-left: -50px;
+    width: 200px;
+}
+
+#add-information:hover {
+    opacity: 0.70;
+}
+
+/* HELP TEXT UNDER THE FIELD */
+small {
+    margin-top: 200px;
 }
 
 
