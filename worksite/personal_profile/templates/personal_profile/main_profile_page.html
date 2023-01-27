@@ -6,61 +6,54 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1 id="profile-title">Мій акаунт</h1>
-        {% if list_first_error %}
-            <div class="form-error">{{ list_first_error|escape }}</div>
-        {% endif %}
-        {% if messages %}
-            {% include 'jobseeker/_include/flash_messages.html' with messages=messages %}
-        {% endif %}
-        <div class="pre-form-title-wrapper">
-            <p class="pre-form-title">Ваші персональні дані побачать лише ті, кому ви відкриєте доступ</p>
-        </div>
-        <div class="main-row">
-            <div class="main-column">
-                <form method="post" id="add-jobseeker-info-form" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="row">
-                        {% for field in form %}
-                            <div class="group">
-                                <div class="column">
-                                    <label class="form-label">{{ field.label }}</label>
-                                </div>
-                                <div class="column">
-                                    {{ field }}
-                                </div>
-                                {% if field.label == 'LinkedIn' %}
-                                <p>
-                                    <small class="linkedin-field-small">
-                                        На приклад,
-                                        <a href="https://www.linkedin.com/in/dproc/" target="_blank">
-                                            https://www.linkedin.com/in/dproc/
-                                        </a>
-                                    </small>
-                                </p>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                        <div class="group">
-                            <center>
-                                <button id="add-information" class="btn btn-secondary">
-                                    Додати дані
-                                </button>
-                            </center>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="main-column">
-                <form method="post" id="jobseeker-avatar" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="image-container">
-                        {{ photo_form.label }}
-                        {{ photo }}
-                    </div>
-                </form>
-            </div>
-        </div>
+    <h1 id="profile-title">Мій акаунт</h1>
+    {% if list_first_error %}
+        <div class="form-error">{{ list_first_error|escape }}</div>
+    {% endif %}
+    {% if messages %}
+        {% include 'jobseeker/_include/flash_messages.html' with messages=messages %}
+    {% endif %}
+    <div class="pre-form-title-wrapper">
+        <p class="pre-form-title">Ваші персональні дані побачать лише ті, кому ви відкриєте доступ</p>
     </div>
+    <form method="post" id="add-jobseeker-info-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+                {% for field in first_form %}
+                <div class="group">
+                    <div class="column">
+                        {% if field.label == 'Прикріпіть ваш файл з резюме' %}
+                            <label class="file-input">{{ field.label }}</label>
+                        {% else %}
+                            <label class="form-label">{{ field.label }}</label>
+                        {% endif %}
+                    </div>
+                    <div class="column">
+                        {{ field }}
+                    </div>
+                    {% if field.label == 'LinkedIn' %}
+                        <p class="small-help-text">
+                            <small class="linkedin-field-small">
+                                На приклад,
+                                <a href="https://www.linkedin.com/in/dproc/" target="_blank">
+                                    https://www.linkedin.com/in/dproc/
+                                </a>
+                            </small>
+                        </p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <div class="group">
+                    <center>
+                        <button id="add-information" class="btn btn-secondary">
+                            Додати дані
+                        </button>
+                    </center>
+                </div>
+        </div>
+    </form>
+    <form method="post" enctype="multipart/form-data" id="user-avatar">
+        {% csrf_token %}
+        {{ second_form.as_p }}
+    </form>
 {% endblock %}

@@ -14,7 +14,7 @@ class ProfileInfoForm(forms.ModelForm):
     linkedin = forms.URLField(label='LinkedIn', widget=forms.URLInput(attrs={'class': 'form-control'}))
     git_hub = forms.URLField(label='GitHub', widget=forms.URLInput(attrs={'class': 'form-control'}))
 
-    cv = forms.FileField(label='Прикріпіть ваш файл з резюме')
+    cv = forms.FileField(label='Прикріпіть ваш файл з резюме', widget=forms.FileInput(attrs={'class': 'cv_file'}))
 
 
 class ProfilePhotoForm(forms.Form):

@@ -95,10 +95,11 @@ body {
 
 /* FORM */
 #add-jobseeker-info-form {
-    max-width: 1000px;
+    float: left;
+    width: 50%;
+    max-width: 850px;
     margin-left: 10px;
     margin-top: 30px;
-
 }
 
 #profile-title {
@@ -110,7 +111,7 @@ body {
 
 /* LABELS AND INPUTS POSITION */
 
-.form-label {
+.form-label .file-input .cv_file {
     font-family: 'Rubik';
 }
 
@@ -131,7 +132,7 @@ body {
 }
 
 #add-jobseeker-info-form input {
-    max-width: 400px;
+    max-width: 450px;
     margin-left: 30px;
 }
 
@@ -153,9 +154,26 @@ body {
 }
 
 /* HELP TEXT UNDER THE FIELD */
-small {
-    margin-top: 200px;
+.small-help-text {
+    display: inline-block;
+    margin-left: 320px;
+    max-width: 400px;
+    margin-right: 20px;
+    font-family: 'Rubik';
+    color: #BFBFBF;
 }
 
+.small-help-text a{
+    text-decoration: none;
+}
 
+#user-avatar {
+    float: right;
+    margin-top: 40px;
+}
+
+footer {
+    clear: both;
+    margin-top: 70px;
+}
 
