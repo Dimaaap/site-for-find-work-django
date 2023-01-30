@@ -7,15 +7,15 @@
 
 {% block body %}
     <h1 id="profile-title">Мій акаунт</h1>
+    <div class="pre-form-title-wrapper">
+        <p class="pre-form-title">Ваші персональні дані побачать лише ті, кому ви відкриєте доступ</p>
+    </div>
     {% if list_first_error %}
         <div class="form-error">{{ list_first_error|escape }}</div>
     {% endif %}
     {% if messages %}
         {% include 'jobseeker/_include/flash_messages.html' with messages=messages %}
     {% endif %}
-    <div class="pre-form-title-wrapper">
-        <p class="pre-form-title">Ваші персональні дані побачать лише ті, кому ви відкриєте доступ</p>
-    </div>
     <form method="post" id="add-jobseeker-info-form" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="row">
@@ -45,15 +45,23 @@
                 {% endfor %}
                 <div class="group">
                     <center>
-                        <button id="add-information" class="btn btn-secondary">
+                        <button id="add-information" class="btn btn-secondary" name="add-information">
                             Додати дані
                         </button>
                     </center>
                 </div>
         </div>
     </form>
+    <div class="image">
+        <img src="../../static/personal_profile/images/default_avatar.png" id="avatar-image" class="" alt="...">
+    </div>
     <form method="post" enctype="multipart/form-data" id="user-avatar">
         {% csrf_token %}
-        {{ second_form.as_p }}
+        {% for field in second_form %}
+            <div class="group">
+                <label class="photo-field">Завантажити нове фото</label><br>
+                <input type="file" class="photo-input" name="add-photo">
+            </div>
+        {% endfor %}
     </form>
 {% endblock %}

@@ -8,7 +8,7 @@ class JobseekerProfileInfo(models.Model):
     photo = models.ImageField(upload_to='avatars/%Y/%m/%d',
                               default='static/personal_profile/images/default_avatar.png')
     expected_job = models.CharField(max_length=400, blank=True)
-    telegram = models.URLField(blank=True, max_length=200)
+    telegram = models.CharField(max_length=150, blank=True)
     linkedin = models.URLField(blank=True)
     git_hub = models.URLField(blank=True)
     cv = models.FileField(upload_to='cv/%Y/%m/%d')

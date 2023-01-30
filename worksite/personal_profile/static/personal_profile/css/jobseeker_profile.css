@@ -100,6 +100,7 @@ body {
     max-width: 850px;
     margin-left: 10px;
     margin-top: 30px;
+    font-family: 'Rubik';
 }
 
 #profile-title {
@@ -156,7 +157,7 @@ body {
 /* HELP TEXT UNDER THE FIELD */
 .small-help-text {
     display: inline-block;
-    margin-left: 320px;
+    margin-left: 265px;
     max-width: 400px;
     margin-right: 20px;
     font-family: 'Rubik';
@@ -167,9 +168,15 @@ body {
     text-decoration: none;
 }
 
+/*
+    FORM FOR USER-PHOTO DOWNLOAD
+*/
+
 #user-avatar {
     float: right;
     margin-top: 40px;
+    font-family: 'Rubik';
+    margin-right: 15px;
 }
 
 footer {
@@ -177,3 +184,34 @@ footer {
     margin-top: 70px;
 }
 
+/*
+    USER IMAGE
+*/
+
+
+#avatar-image {
+    margin-top: 40px;
+    margin-bottom: -20px;
+    max-weight: 200px;
+    max-height: 200px;
+    margin-left: 170px;
+    clip-path: circle();
+}
+
+#user-avatar input::file-selector-button {
+    background: blue;
+    border: none;
+    color: white;
+    padding: 0.7rem;
+    font-family: 'Rubik';
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+/*
+    FORM ERRORS
+*/
+
+.form-error {
+    background: #D20000;
+}
