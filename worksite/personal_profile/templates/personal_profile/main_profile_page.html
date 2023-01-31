@@ -10,11 +10,24 @@
     <div class="pre-form-title-wrapper">
         <p class="pre-form-title">Ваші персональні дані побачать лише ті, кому ви відкриєте доступ</p>
     </div>
-    {% if list_first_error %}
+    <!--{% if list_first_error %}
         <div class="form-error">{{ list_first_error|escape }}</div>
-    {% endif %}
+    {% endif %} -->
+    <!--{% if messages %}
+
+    {% endif %} -->
     {% if messages %}
-        {% include 'jobseeker/_include/flash_messages.html' with messages=messages %}
+        {% for message in messages %}
+          {% if message.tags != 'error' %}
+            <div class="alert alert-{{ message.tags }} m-2" id="msg" role="alert">
+              {{ message }}
+            </div>
+          {% else %}
+            <div class="alert alert-danger m-2" id="danger-msg" role="alert">
+              {{ message }}
+            </div>
+          {% endif %}
+        {% endfor %}
     {% endif %}
     <form method="post" id="add-jobseeker-info-form" enctype="multipart/form-data">
         {% csrf_token %}
@@ -41,6 +54,9 @@
                             </small>
                         </p>
                     {% endif %}
+                </div>
+                <div class="form-error">
+                    {{ field.errors }}
                 </div>
                 {% endfor %}
                 <div class="group">

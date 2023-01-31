@@ -158,7 +158,7 @@ body {
 .small-help-text {
     display: inline-block;
     margin-left: 265px;
-    max-width: 400px;
+    max-width: 300px;
     margin-right: 20px;
     font-family: 'Rubik';
     color: #BFBFBF;
@@ -214,4 +214,5 @@ footer {
 
 .form-error {
     background: #D20000;
+    font-family: 'Rubik';
 }

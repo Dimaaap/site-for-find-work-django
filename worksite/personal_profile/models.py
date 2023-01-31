@@ -15,4 +15,7 @@ class JobseekerProfileInfo(models.Model):
     active_search = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.jobseeker
+        return self.expected_job
+
+    def __iter__(self):
+

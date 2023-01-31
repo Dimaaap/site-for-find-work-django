@@ -1,6 +1,6 @@
 from random import randint
 
-from ..filters import EqualFilter
+from filters import EqualFilter
 
 
 def select_all_fields_from_model(model: callable):
