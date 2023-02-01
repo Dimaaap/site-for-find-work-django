@@ -11,11 +11,10 @@ class JobseekerProfileInfo(models.Model):
     telegram = models.CharField(max_length=150, blank=True)
     linkedin = models.URLField(blank=True)
     git_hub = models.URLField(blank=True)
-    cv = models.FileField(upload_to='cv/%Y/%m/%d')
+    cv = models.FileField(upload_to='cvs/%Y/%m/%d')
     active_search = models.BooleanField(default=True)
 
     def __str__(self):
         return self.expected_job
 
-    def __iter__(self):
 

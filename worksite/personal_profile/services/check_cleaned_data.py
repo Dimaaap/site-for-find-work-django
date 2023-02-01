@@ -9,3 +9,4 @@ def check_cleaned_data(fields: list | tuple | set, cleaned_data: dict) -> dict:
         if not cleaned_data[field]:
             cleaned_data.pop(field)
     return cleaned_data
+

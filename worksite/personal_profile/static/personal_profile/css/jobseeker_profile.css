@@ -133,9 +133,11 @@ body {
 }
 
 #add-jobseeker-info-form input {
-    max-width: 450px;
+    /*max-width: 450px;*/
+    width: 420px;
     margin-left: 30px;
 }
+
 
 /* FORM-BUTTON */
 #add-information {
@@ -158,9 +160,10 @@ body {
 .small-help-text {
     display: inline-block;
     margin-left: 265px;
-    max-width: 300px;
+    /*max-width: 300px;*/
     margin-right: 20px;
     font-family: 'Rubik';
+    margin-bottom: -10px;
     color: #BFBFBF;
 }
 
@@ -212,7 +215,18 @@ footer {
     FORM ERRORS
 */
 
+.errorlist {
+    list-style-type: none;
+    color: white;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: -35px;
+}
+
 .form-error {
-    background: #D20000;
-    font-family: 'Rubik';
+    margin-left: 270px;
+    max-width: 420px;
+    background: #C00000;
+    padding-bottom: 0px;
+    border-radius: 10px 10px;
 }

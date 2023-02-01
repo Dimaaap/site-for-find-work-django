@@ -18,27 +18,32 @@ def main_profile_page_view(request, login):
                       'telegram': jobseeker_profile.telegram,
                       'linkedin': jobseeker_profile.linkedin,
                       'git_hub': jobseeker_profile.git_hub}
-    first_form = ProfileInfoForm(request.POST or None, initial=initial_values)
-    context['first_form'] = first_form
+    profile_data_form = ProfileInfoForm(request.POST or None, initial=initial_values)
+    context['first_form'] = profile_data_form
     second_form = ProfilePhotoForm(request.POST or None)
     context['second_form'] = second_form
-    if first_form.is_valid():
-        new_data = first_form.save(commit=False)
+    if profile_data_form.is_valid():
+        cv_file = request.FILES['cv']
+        new_data = profile_data_form.save(commit=False)
         new_data.jobseeker = jobseeker
+        new_data.cv = cv_file
         if jobseeker_profile:
             fields = ('expected_job', 'telegram', 'linkedin', 'git_hub', 'cv')
-            check_cleaned_data(fields, first_form.cleaned_data)
+            check_cleaned_data(fields, profile_data_form.cleaned_data)
             try:
                 jobseeker_profile_filter = filter_fields_from_db(JobseekerProfileInfo, 'jobseeker',
                                                                  jobseeker)
-                jobseeker_profile_filter.update(jobseeker=jobseeker, **first_form.cleaned_data)
+                context['jobseeker_profile'] = jobseeker_profile
+                if cv_file:
+                    jobseeker_profile_filter.update(jobseeker=jobseeker, **profile_data_form.cleaned_data, cv=cv_file)
+                else:
+                    jobseeker_profile_filter.update(jobseeker=jobseeker, **profile_data_form.cleaned_data)
             except Exception as e:
                 print(e)
                 messages.error(request, 'Виникла помилка додавання даних')
         else:
             new_data.save()
         messages.success(request, 'Ваші дані успішно додано')
-    else:
-        messages.error(request, 'Помилка додавання даних')
-
+        print(context)
+        print(cv_file)
     return render(request, template_name='personal_profile/main_profile_page.html', context=context)

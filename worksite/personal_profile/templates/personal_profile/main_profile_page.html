@@ -42,7 +42,11 @@
                         {% endif %}
                     </div>
                     <div class="column">
-                        {{ field }}
+                        {% if jobseeker_profile.cv and field.label == 'Прикріпіть ваш файл з резюме' %}
+                            {{ field }}
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
                     </div>
                     {% if field.label == 'LinkedIn' %}
                         <p class="small-help-text">

@@ -13,3 +13,7 @@ def get_fields_from_db(model: callable, key: str, value: str):
 
 def select_all_fields_from_db(model: callable):
     return model.objects.all()
+
+
+def update_data_in_model(filter_key: str, filter_value: str, update_data: dict, **kwargs):
+    pass
