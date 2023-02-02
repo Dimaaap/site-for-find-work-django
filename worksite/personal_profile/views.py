@@ -1,4 +1,6 @@
-from django.shortcuts import render, redirect
+import logging
+
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
@@ -8,9 +10,12 @@ from .services.db_utils import *
 from .models import JobseekerProfileInfo
 from .forms import ProfileInfoForm, ProfilePhotoForm
 
+logger = logging.getLogger(__name__)
+
 
 @login_required
 def main_profile_page_view(request, login):
+    logger.warning('dlskdlsakdlsakdladlsakdlsa')
     jobseeker = get_fields_from_db(JobseekerRegisterInfo, 'login', login)
     context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name, 'login': jobseeker.login}
     jobseeker_profile = get_fields_from_db(JobseekerProfileInfo, 'jobseeker', jobseeker)
@@ -44,6 +49,4 @@ def main_profile_page_view(request, login):
         else:
             new_data.save()
         messages.success(request, 'Ваші дані успішно додано')
-        print(context)
-        print(cv_file)
     return render(request, template_name='personal_profile/main_profile_page.html', context=context)
