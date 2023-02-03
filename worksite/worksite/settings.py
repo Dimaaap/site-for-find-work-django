@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 
 from decouple import config
+from pythonjsonlogger.jsonlogger import JsonFormatter
+from personal_profile.logging_formatting import CustomJsonFormatter
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -56,13 +58,16 @@ LOGGING = {
         'main_format': {
             'format': '{asctime} - {levelname} - {module} - {filename} - {message}',
             'style': '{',
+        },
+        'json_formatter': {
+            '()': CustomJsonFormatter,
         }
     },
     'handlers': {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'formatter': 'main_format',
+            'formatter': 'json_formatter',
             'filename': 'information.log'
         }
     },
@@ -140,7 +145,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # MEDIA
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
 # TWILIO
