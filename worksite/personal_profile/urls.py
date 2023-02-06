@@ -4,5 +4,5 @@ from .views import *
 
 
 urlpatterns = [
-    path('profile/<str:login>>', main_profile_page_view, name='jobseeker_profile')
+    path('profile/<str:login>/', main_profile_page_view, name='jobseeker_profile')
 ]

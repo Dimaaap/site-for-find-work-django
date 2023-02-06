@@ -69,11 +69,22 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'formatter': 'json_formatter',
             'filename': 'information.log'
+        },
+        'jobseeker_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'json_formatter',
+            'filename': 'logger.log'
         }
     },
     'loggers': {
         'personal_profile': {
             'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True
+        },
+        'jobseeker': {
+            'handlers': ['jobseeker_file'],
             'level': 'INFO',
             'propagate': True
         }

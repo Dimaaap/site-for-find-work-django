@@ -3,6 +3,7 @@ import logging
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.utils import IntegrityError
 
 from jobseeker.models import JobseekerRegisterInfo
 from .services.db_utils import *
@@ -16,6 +17,8 @@ logger = logging.getLogger(__name__)
 @login_required
 def main_profile_page_view(request, login):
     jobseeker = get_fields_from_db(JobseekerRegisterInfo, 'login', login)
+    new_profile = JobseekerProfileInfo(jobseeker=jobseeker)
+    #new_profile.save()
     context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name, 'login': jobseeker.login}
     jobseeker_profile = get_fields_from_db(JobseekerProfileInfo, 'jobseeker', jobseeker)
     initial_values = {'expected_job': jobseeker_profile.expected_job,
@@ -30,14 +33,13 @@ def main_profile_page_view(request, login):
         logger.info('User got data for links form')
         cv_file = request.FILES.get('cv')
         new_data = profile_data_form.save(commit=False)
-        new_data.jobseeker = jobseeker
         new_data.cv = cv_file
         if jobseeker_profile:
             arguments = ('jobseeker', jobseeker)
             try:
                 update_form_data(form=profile_data_form, model=JobseekerProfileInfo,
                                  filter_args=arguments)
-            except (ValueError, Exception):
+            except (ValueError, IntegrityError):
                 logger.error('A function update_form_data raises ValueError')
             context['jobseeker_profile'] = jobseeker_profile
             if update_cv_field_in_model(model=JobseekerProfileInfo, tuple_args=arguments,
