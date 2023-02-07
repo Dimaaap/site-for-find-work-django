@@ -148,7 +148,7 @@ body {
     font-style: 'Rubik';
     font-size: 20px;
     padding: 5px;
-    margin-left: -50px;
+    margin-left: 50px;
     width: 200px;
 }
 
@@ -230,3 +230,44 @@ footer {
     padding-bottom: 0px;
     border-radius: 10px 10px;
 }
+
+/*
+    FILENAME STRING
+*/
+
+#file-info {
+    text-decoration: none;
+    margin-left: 30px;
+}
+
+.cv_file::file-selector-button{
+    border: none;
+    background: blue;
+    color: white;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+/*
+    FIELDS NOTICES
+*/
+
+.file-notices {
+    margin-left: 30px;
+    min-width: 500px;
+    color: #BFBFBF;
+    margin-top: -10px;
+}
+
+/*
+    DELETE FILE BUTTON
+*/
+
+.file-delete {
+    text-decoration: none;
+    margin-left: 370px;
+    color: #BFBFBF;
+    font-size: 18px;
+}
+

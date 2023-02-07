@@ -35,20 +35,27 @@
                 {% for field in first_form %}
                 <div class="group">
                     <div class="column">
-                        {% if field.label == 'Прикріпіть ваш файл з резюме' %}
+                        {% if field.label == 'Прикріпіть ваш файл з резюме: ' %}
                             <label class="file-input">{{ field.label }}</label>
                         {% else %}
                             <label class="form-label">{{ field.label }}</label>
                         {% endif %}
                     </div>
                     <div class="column">
-                        {% if jobseeker_profile.cv and field.label == 'Прикріпіть ваш файл з резюме' %}
+                        {% if cv_file and field.label == 'Прикріпіть ваш файл з резюме: ' %}
+                            <a id='file-info' href="{{ jobseeker_profile.cv_file.url }}"><!--{{ jobseeker_profile.base_cv }}-->
+                                {{ cv_file }}
+                            </a>
+                            <a href="#" class="file-delete">x</a>
                             {{ field }}
+                            <small class="file-notices">.docx, .pdf</small>
+                            <small class="file-notices">Максимальний розмір - 1,5МБ</small>
+
                         {% else %}
                             {{ field }}
                         {% endif %}
                     </div>
-                    {% if field.label == 'LinkedIn' %}
+                    {% if field.label == 'LinkedIn: ' %}
                         <p class="small-help-text">
                             <small class="linkedin-field-small">
                                 На приклад,

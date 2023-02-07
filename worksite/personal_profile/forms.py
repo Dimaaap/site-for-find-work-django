@@ -11,16 +11,22 @@ class ProfileInfoForm(forms.ModelForm):
     expected_job = forms.CharField(label='Ваша очікувана посада: ',
                                    required=False,
                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
-    telegram = forms.CharField(required=False,
+    telegram = forms.CharField(label='Telegram: ',
+                               required=False,
                                widget=forms.TextInput(attrs={'class': 'form-control'}))
     linkedin = forms.URLField(required=False,
-                              label='LinkedIn', widget=forms.URLInput(attrs={'class': 'form-control'}))
+                              label='LinkedIn: ',
+                              widget=forms.URLInput(attrs={'class': 'form-control'}))
     git_hub = forms.URLField(required=False,
-                             label='GitHub', widget=forms.URLInput(attrs={'class': 'form-control'}))
+                             label='GitHub: ',
+                             widget=forms.URLInput(attrs={'class': 'form-control'}))
 
-    cv = forms.FileField(required=False,
-                         label='Прикріпіть ваш файл з резюме', widget=forms.FileInput(attrs={'class': 'cv_file'}))
+    cv_file = forms.FileField(required=False,
+                              label='Прикріпіть ваш файл з резюме: ',
+                              widget=forms.FileInput(attrs={'class': 'cv_file',
+                                                            'name': 'cv-file'}))
 
 
 class ProfilePhotoForm(forms.Form):
-    photo = forms.ImageField(label='Завантажити нове фото', widget=forms.FileInput(attrs={'class': 'user-avatar'}))
+    photo = forms.ImageField(label='Завантажити нове фото',
+                             widget=forms.FileInput(attrs={'class': 'user-avatar'}))

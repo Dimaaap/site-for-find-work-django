@@ -26,8 +26,10 @@ def update_cv_field_in_model(model: callable, tuple_args: tuple, cv_file: open):
     query = get_fields_from_db(model, *tuple_args)
     if cv_file:
         try:
-            query.cv = cv_file
+            query.cv_file = cv_file
             query.save()
         except Exception:
             return False
     return True
+
+
