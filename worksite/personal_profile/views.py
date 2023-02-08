@@ -1,7 +1,7 @@
 import logging
 import os
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.utils import IntegrityError
@@ -28,7 +28,8 @@ def main_profile_page_view(request, login):
     context['first_form'] = profile_data_form
     second_form = ProfilePhotoForm(request.POST or None)
     context['second_form'] = second_form
-
+    context['jobseeker_profile'] = jobseeker_profile
+    print(jobseeker_profile.photo)
     if profile_data_form.is_valid():
         logger.info('User got data for links form')
         cv_file = request.FILES.get('cv_file')
@@ -56,3 +57,33 @@ def main_profile_page_view(request, login):
             logger.info('Successfully adding write to db')
         messages.success(request, 'Ваші дані успішно додано')
     return render(request, template_name='personal_profile/main_profile_page.html', context=context)
+
+
+@login_required
+def set_user_image_view(request, login):
+    jobseeker = get_fields_from_db(JobseekerRegisterInfo, 'login', login)
+    jobseeker_profile = get_fields_from_db(JobseekerProfileInfo, 'jobseeker', jobseeker)
+    image_form = ProfilePhotoForm(request.POST or None)
+    context = {}
+    if request.method == 'POST':
+        if image_form.is_valid():
+            image = request.FILES.get('add-photo')
+            context['image'] = image
+            context['jobseeker_profile'] = jobseeker_profile
+            print(jobseeker_profile.photo)
+            jobseeker_profile.photo = image
+            try:
+                jobseeker_profile.save()
+            except Exception:
+                logger.error('Error downloading an image file with form')
+        else:
+            print(image_form.errors)
+    return redirect('jobseeker_profile', login=jobseeker.login)
+
+
+@login_required
+def delete_file_view(request, pk: int):
+    profile = get_fields_from_db(JobseekerProfileInfo, 'pk', pk)
+    profile.cv_file = None
+    profile.save()
+    return redirect('jobseeker_profile', login=profile.jobseeker.login)

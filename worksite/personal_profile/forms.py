@@ -28,5 +28,6 @@ class ProfileInfoForm(forms.ModelForm):
 
 
 class ProfilePhotoForm(forms.Form):
-    photo = forms.ImageField(label='Завантажити нове фото',
+    photo = forms.ImageField(required=False,
+                             label='Завантажити нове фото',
                              widget=forms.FileInput(attrs={'class': 'user-avatar'}))

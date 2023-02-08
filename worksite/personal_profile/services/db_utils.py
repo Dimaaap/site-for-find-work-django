@@ -6,7 +6,7 @@ def filter_fields_from_db(model: callable, key: str, value: str):
     return model.objects.filter(**equal_filter(key, value))
 
 
-def get_fields_from_db(model: callable, key: str, value: str):
+def get_fields_from_db(model: callable, key: str, value: str | int):
     equal_filter = EqualFilter()
     return model.objects.get(**equal_filter(key, value))
 

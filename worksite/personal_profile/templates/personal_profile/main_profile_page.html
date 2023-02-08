@@ -44,9 +44,9 @@
                     <div class="column">
                         {% if cv_file and field.label == 'Прикріпіть ваш файл з резюме: ' %}
                             <a id='file-info' href="{{ jobseeker_profile.cv_file.url }}"><!--{{ jobseeker_profile.base_cv }}-->
-                                {{ cv_file }}
+                                {{ jobseeker_profile.base_cv }}
                             </a>
-                            <a href="#" class="file-delete">x</a>
+                            <a href="{% url 'delete_file' jobseeker_profile.pk %}" class="file-delete">x</a>
                             {{ field }}
                             <small class="file-notices">.docx, .pdf</small>
                             <small class="file-notices">Максимальний розмір - 1,5МБ</small>
@@ -80,14 +80,34 @@
         </div>
     </form>
     <div class="image">
-        <img src="../../static/personal_profile/images/default_avatar.png" id="avatar-image" class="" alt="...">
+        {% if not jobseeker_profile.photo %}
+            <img src="../../static/personal_profile/images/default_avatar.png" id="avatar-image" class="" alt="...">
+        {% else %}
+            <img src="{{ jobseeker_profile.photo.url }}" class="avatar-image" alt="...">
+        {% endif %}
     </div>
-    <form method="post" enctype="multipart/form-data" id="user-avatar">
+    <form method="post" enctype="multipart/form-data" id="user-avatar"
+          action="{% url 'image-form' jobseeker.login %}">
         {% csrf_token %}
         {% for field in second_form %}
             <div class="group">
                 <label class="photo-field">Завантажити нове фото</label><br>
                 <input type="file" class="photo-input" name="add-photo">
+                <br>
+                <small class="file-notices" id="extensions">
+                    *.jpeg, *.jpg, *.png
+                </small>
+                <br>
+                <small class="file-notices" id="filesize">
+                    Максимальний розмір - 1,5МБ
+                </small>
+            </div>
+            <div class="group">
+                <center>
+                    <button id="add-image" class="btn btn-secondary" name="add-image">
+                        Додати фото
+                    </button>
+                </center>
             </div>
         {% endfor %}
     </form>

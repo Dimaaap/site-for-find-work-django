@@ -269,5 +269,46 @@ footer {
     margin-left: 370px;
     color: #BFBFBF;
     font-size: 18px;
+
+}
+
+
+.avatar-image {
+    margin-top: 40px;
+    margin-bottom: -20px;
+    max-weight: 200px;
+    max-height: 200px;
+    margin-left: 200px;
+    clip-path: circle();
+}
+
+/*
+    IMAGE NOTICES
+*/
+#extensions {
+    margin-left: 0;
+}
+
+#filesize {
+    margin-left: 0;
+}
+
+/*
+    IMAGE SAVE BUTTON
+*/
+
+#add-image {
+    background: blue;
+    border: none;
+    padding: 5px;
+    font-size: 20px;
+    width: 200px;
+    height: 50px;
+    margin-top: -20px;
+    margin-left: -150px;
+}
+
+#add-image:hover {
+    opacity: 0.70;
 }
 
