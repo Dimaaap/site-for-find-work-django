@@ -9,6 +9,7 @@ from django.db.utils import IntegrityError
 from jobseeker.models import JobseekerRegisterInfo
 from .services.db_utils import *
 from .services.utils import update_form_data, update_cv_field_in_model
+from .services.file_utils import *
 from .models import JobseekerProfileInfo
 from .forms import ProfileInfoForm, ProfilePhotoForm
 
@@ -29,33 +30,38 @@ def main_profile_page_view(request, login):
     second_form = ProfilePhotoForm(request.POST or None)
     context['second_form'] = second_form
     context['jobseeker_profile'] = jobseeker_profile
-    print(jobseeker_profile.photo)
     if profile_data_form.is_valid():
         logger.info('User got data for links form')
         cv_file = request.FILES.get('cv_file')
-        new_data = profile_data_form.save(commit=False)
-        new_data.cv_file = cv_file
-        if jobseeker_profile:
-            arguments = ('jobseeker', jobseeker)
-            try:
-                update_form_data(form=profile_data_form, model=JobseekerProfileInfo,
-                                 filter_args=arguments)
-            except (ValueError, IntegrityError):
-                logger.error('A function update_form_data raises ValueError')
-            context['jobseeker_profile'] = jobseeker_profile
-            if request.FILES:
-                context['cv_file'] = os.path.basename(str(cv_file))
-                if update_cv_field_in_model(model=JobseekerProfileInfo, tuple_args=arguments,
-                                            cv_file=cv_file):
-                    logger.info('success adding a file to db')
+        print(cv_file)
+        if cv_file:
+            if not validate_file_extension(str(cv_file)):
+                messages.error(request, "Неправильне розширення файлу")
+            new_data = profile_data_form.save(commit=False)
+            new_data.cv_file = cv_file
+            if jobseeker_profile:
+                arguments = ('jobseeker', jobseeker)
+                try:
+                    update_form_data(form=profile_data_form, model=JobseekerProfileInfo,
+                                     filter_args=arguments)
+                except (ValueError, IntegrityError):
+                    logger.error('A function update_form_data raises ValueError')
+                context['jobseeker_profile'] = jobseeker_profile
+                if request.FILES:
+                    context['cv_file'] = os.path.basename(str(cv_file))
+                    if update_cv_field_in_model(model=JobseekerProfileInfo, tuple_args=arguments,
+                                                cv_file=cv_file):
+                        logger.info('success adding a file to db')
+                    else:
+                        logger.error('Error adding file in update_cv_field_in_model function')
                 else:
-                    logger.error('Error adding file in update_cv_field_in_model function')
+                    context['cv_file'] = os.path.basename(str(jobseeker_profile.cv_file))
             else:
-                context['cv_file'] = os.path.basename(str(jobseeker_profile.cv_file))
+                new_data.save()
+                logger.info('Successfully adding write to db')
+            messages.success(request, 'Ваші дані успішно додано')
         else:
-            new_data.save()
-            logger.info('Successfully adding write to db')
-        messages.success(request, 'Ваші дані успішно додано')
+            cv_file = ''
     return render(request, template_name='personal_profile/main_profile_page.html', context=context)
 
 
@@ -68,13 +74,22 @@ def set_user_image_view(request, login):
     if request.method == 'POST':
         if image_form.is_valid():
             image = request.FILES.get('add-photo')
+            if image:
+                if not validate_file_size(image):
+                    messages.error(request, 'Розмір фото перевишує заданий ліміт')
+                try:
+                    validate_image_extension(image)
+                    messages.error(request, 'Недопустиме розширення файлу')
+                except TypeError:
+                    messages.error(request, 'Недопустиме розширення файлу')
+                    context['image'] = False
             context['image'] = image
             context['jobseeker_profile'] = jobseeker_profile
-            print(jobseeker_profile.photo)
             jobseeker_profile.photo = image
             try:
                 jobseeker_profile.save()
-            except Exception:
+            except Exception as e:
+                print(e)
                 logger.error('Error downloading an image file with form')
         else:
             print(image_form.errors)

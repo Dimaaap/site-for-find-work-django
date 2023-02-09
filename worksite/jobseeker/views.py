@@ -12,7 +12,7 @@ from .forms import JobseekerRegisterForm, JobseekerLoginForm, CodeForm
 from .models import JobseekerRegisterInfo
 from .services.custom_errors import *
 from .services.sms_codes import generate_code, send_sms_code
-from .services.db_functions import create_user_login
+from .services.db_functions import create_user_login, get_write_from_model
 
 logger = logging.getLogger(__name__)
 
@@ -61,13 +61,10 @@ def jobseeker_register_view(request):
             full_name = form.cleaned_data['full_name']
             phone_number = form.cleaned_data['phone_number']
             email = form.cleaned_data['email']
+            print(email)
             password = form.cleaned_data['password']
             hash_password = make_password(password)
             try:
-
-                ### МОЖЛИВО ВАРТО НАДСИЛАТИ ПОВІДОМЛЕННЯ
-                ### ІЗ КОДОМ ДЛЯ ВЕРИФІКАЦІЇ МОБІЛЬНОГО
-                ### ПРЯМО ТУТ?????????????????????
                 try:
                     code = generate_code()
                 except TwilioRestException:
@@ -97,8 +94,10 @@ def verificate_number_view(request):
         return redirect('index_page', permanent=True)
     form = CodeForm(request.POST or None)
     session_tuple = request.session['session_tuple']
+    print(session_tuple)
     context['form'] = form
     user_login = create_user_login(session_tuple[2])
+    print(user_login)
     user = JobseekerRegisterInfo(full_name=session_tuple[0],
                                  phone_number=session_tuple[1],
                                  email=session_tuple[2],

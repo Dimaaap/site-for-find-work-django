@@ -1,6 +1,7 @@
 import os
 
 from django.db import models
+from django.core.validators import FileExtensionValidator
 from PIL import Image
 
 from jobseeker.models import JobseekerRegisterInfo
@@ -15,8 +16,8 @@ class JobseekerProfileInfo(models.Model):
     photo = models.ImageField(upload_to='avatars/%Y/%m/%d',
                               blank=True,
                               null=True,
-                              # default='static/personal_profile/images/default_avatar.png')
-                              )
+                              validators=[FileExtensionValidator(allowed_extensions=
+                                                                 ['jpg', 'png', 'jpeg'])])
     expected_job = models.CharField(max_length=400, blank=True)
     telegram = models.CharField(max_length=150, blank=True)
     linkedin = models.URLField(blank=True)
@@ -29,11 +30,3 @@ class JobseekerProfileInfo(models.Model):
 
     def base_cv(self):
         return os.path.basename(self.cv_file.name)
-
-    def save(self, *args, **kwargs):
-        super(JobseekerProfileInfo).save(*args, **kwargs)
-        image = Image.open(self.photo)
-        if image.width > 400 or image.height > 300:
-            output_size = (400, 300)
-            image.thumbnail(output_size)
-            image.save(self.photo)

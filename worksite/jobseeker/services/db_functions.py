@@ -15,7 +15,13 @@ def select_field_value_from_model(model: callable, field_name: str, field_value:
 
 def get_write_from_model(model: callable, field_name: str, field_value: str):
     equal_filter = EqualFilter()
-    return model.objects.get(**equal_filter(field_name, field_value))
+    query = []
+    try:
+        query = model.objects.get(**equal_filter(field_name, field_value))
+    except Exception:
+        query = []
+    finally:
+        return query
 
 
 def create_user_login(email: str):

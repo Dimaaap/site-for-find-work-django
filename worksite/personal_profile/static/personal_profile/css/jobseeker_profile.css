@@ -312,3 +312,26 @@ footer {
     opacity: 0.70;
 }
 
+/*
+    FLASH MESSAGES
+*/
+
+.alert-danger{
+    display: inline;
+    padding: 5px;
+    margin-left: 250px;
+    text-align: left;
+    width: 500px;
+    border: 2px solid red;
+}
+
+.alert-success {
+    display: inline;
+    padding: 5px;
+    margin-left: 250px;
+    text-align: left;
+    width: 500px;
+    border: 2px solid green;
+}
+
+

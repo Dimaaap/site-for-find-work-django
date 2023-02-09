@@ -16,7 +16,7 @@
     <!--{% if messages %}
 
     {% endif %} -->
-    {% if messages %}
+    <!--{% if messages %}
         {% for message in messages %}
           {% if message.tags != 'error' %}
             <div class="alert alert-{{ message.tags }} m-2" id="msg" role="alert">
@@ -27,6 +27,19 @@
               {{ message }}
             </div>
           {% endif %}
+        {% endfor %}
+    {% endif %}-->
+    {% if messages %}
+    {% for message in messages %}
+        {% if message.tags != 'error' %}
+            <div class="alert alert-{{ message.tags }} m-2" id="msg" role="alert">
+                {{ message }}
+            </div>
+            {% else %}
+                <div class="alert alert-danger" id="danger-msg" role="alert">
+                    {{ message }}
+                </div>
+            {% endif %}
         {% endfor %}
     {% endif %}
     <form method="post" id="add-jobseeker-info-form" enctype="multipart/form-data">
@@ -42,7 +55,7 @@
                         {% endif %}
                     </div>
                     <div class="column">
-                        {% if cv_file and field.label == 'Прикріпіть ваш файл з резюме: ' %}
+                        {% if jobseeker_profile.cv_file and field.label == 'Прикріпіть ваш файл з резюме: ' %}
                             <a id='file-info' href="{{ jobseeker_profile.cv_file.url }}"><!--{{ jobseeker_profile.base_cv }}-->
                                 {{ jobseeker_profile.base_cv }}
                             </a>
@@ -80,7 +93,7 @@
         </div>
     </form>
     <div class="image">
-        {% if not jobseeker_profile.photo %}
+        {% if not jobseeker_profile.photo or not image %}
             <img src="../../static/personal_profile/images/default_avatar.png" id="avatar-image" class="" alt="...">
         {% else %}
             <img src="{{ jobseeker_profile.photo.url }}" class="avatar-image" alt="...">
