@@ -93,7 +93,7 @@
         </div>
     </form>
     <div class="image">
-        {% if not jobseeker_profile.photo or not image %}
+        {% if not jobseeker_profile.photo or image %}
             <img src="../../static/personal_profile/images/default_avatar.png" id="avatar-image" class="" alt="...">
         {% else %}
             <img src="{{ jobseeker_profile.photo.url }}" class="avatar-image" alt="...">
@@ -124,4 +124,5 @@
             </div>
         {% endfor %}
     </form>
+    <a href="{% url 'remind_password' %}">Скинути пароль</a>
 {% endblock %}

@@ -1,5 +1,8 @@
 import os
 
+from django.conf import settings
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 
 def validate_file_extension(file):
     file_extension = os.path.splitext(file)[-1]
@@ -9,16 +12,18 @@ def validate_file_extension(file):
     return False
 
 
-def validate_image_extension(image):
-    image_extension = os.path.splitext(image)[-1]
-    allowed_extensions = ['.jpg', 'jpeg', 'pdf']
-    if image_extension in allowed_extensions:
+def validate_image_extension(image: InMemoryUploadedFile):
+    allowed_formats = ('png', 'jpg', 'jpeg')
+    image_full_type = image.content_type
+    image_type = str(image_full_type).split('/')[-1]
+    if image_type in allowed_formats:
         return True
     return False
 
 
-def validate_file_size(file: open):
-    file_size = os.path.getsize(file)
-    if file_size <= 1024 + (1024 / 2):
+def validate_file_size(file: InMemoryUploadedFile):
+    size = file.size
+    if size <= settings.KILOBYTES_IN_MB + (settings.KILOBYTES_IN_MB / 2):
         return True
     return False
+

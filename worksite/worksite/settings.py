@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'main_page',
     'jobseeker',
     'personal_profile',
+    'password',
 
     'captcha',
     "debug_toolbar",
@@ -163,3 +164,6 @@ MEDIA_URL = '/media/'
 ACCOUNT_SID = config('ACCOUNT_SID')
 AUTH_TOKEN = config('AUTH_TOKEN')
 TWILIO_NUMBER = config('TWILIO_NUMBER')
+
+# FILES
+KILOBYTES_IN_MB = 1024

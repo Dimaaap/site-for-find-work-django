@@ -1,10 +1,9 @@
 import logging
-import os
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.db.utils import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 
 from jobseeker.models import JobseekerRegisterInfo
 from .services.db_utils import *
@@ -16,11 +15,22 @@ from .forms import ProfileInfoForm, ProfilePhotoForm
 logger = logging.getLogger(__name__)
 
 
+def create_jobseeker_profile_service(jobseeker: callable, key: str, value):
+    try:
+        jobseeker_data = get_fields_from_db(JobseekerProfileInfo, key, value)
+        jobseeker_profile = jobseeker_data
+        return jobseeker_profile
+    except ObjectDoesNotExist:
+        jobseeker_profile = JobseekerProfileInfo(jobseeker=jobseeker)
+        jobseeker_profile.save()
+        return jobseeker_profile
+
+
 @login_required
 def main_profile_page_view(request, login):
     jobseeker = get_fields_from_db(JobseekerRegisterInfo, 'login', login)
     context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name, 'login': jobseeker.login}
-    jobseeker_profile = get_fields_from_db(JobseekerProfileInfo, 'jobseeker', jobseeker)
+    jobseeker_profile = create_jobseeker_profile_service(jobseeker, 'jobseeker', jobseeker)
     initial_values = {'expected_job': jobseeker_profile.expected_job,
                       'telegram': jobseeker_profile.telegram,
                       'linkedin': jobseeker_profile.linkedin,
@@ -33,19 +43,13 @@ def main_profile_page_view(request, login):
     if profile_data_form.is_valid():
         logger.info('User got data for links form')
         cv_file = request.FILES.get('cv_file')
-        print(cv_file)
-        if cv_file:
-            if not validate_file_extension(str(cv_file)):
-                messages.error(request, "Неправильне розширення файлу")
+        if cv_file and validate_file_extension(str(cv_file)):
             new_data = profile_data_form.save(commit=False)
             new_data.cv_file = cv_file
             if jobseeker_profile:
                 arguments = ('jobseeker', jobseeker)
-                try:
-                    update_form_data(form=profile_data_form, model=JobseekerProfileInfo,
-                                     filter_args=arguments)
-                except (ValueError, IntegrityError):
-                    logger.error('A function update_form_data raises ValueError')
+                update_form_data(form=profile_data_form, model=JobseekerProfileInfo,
+                                 filter_args=arguments)
                 context['jobseeker_profile'] = jobseeker_profile
                 if request.FILES:
                     context['cv_file'] = os.path.basename(str(cv_file))
@@ -62,6 +66,7 @@ def main_profile_page_view(request, login):
             messages.success(request, 'Ваші дані успішно додано')
         else:
             cv_file = ''
+            messages.error(request, 'Неправильний формат файлу')
     return render(request, template_name='personal_profile/main_profile_page.html', context=context)
 
 
@@ -74,26 +79,26 @@ def set_user_image_view(request, login):
     if request.method == 'POST':
         if image_form.is_valid():
             image = request.FILES.get('add-photo')
-            if image:
-                if not validate_file_size(image):
-                    messages.error(request, 'Розмір фото перевишує заданий ліміт')
+            if image and validate_image_extension(image):
+                context['image'] = image
+                context['jobseeker_profile'] = jobseeker_profile
+                jobseeker_profile.photo = image
                 try:
-                    validate_image_extension(image)
-                    messages.error(request, 'Недопустиме розширення файлу')
-                except TypeError:
-                    messages.error(request, 'Недопустиме розширення файлу')
-                    context['image'] = False
-            context['image'] = image
-            context['jobseeker_profile'] = jobseeker_profile
-            jobseeker_profile.photo = image
-            try:
-                jobseeker_profile.save()
-            except Exception as e:
-                print(e)
-                logger.error('Error downloading an image file with form')
+                    jobseeker_profile.save()
+                except Exception as e:
+                    print(e)
+                    logger.error('Error downloading an image file with form')
+            else:
+                context['image'] = False
+                messages.error(request, 'Неправильний формат.Фото повинне мати один '
+                                        'із форматів:.png, .jpg, .jpeg')
         else:
-            print(image_form.errors)
+            messages.error(request, 'Виникла помилка')
     return redirect('jobseeker_profile', login=jobseeker.login)
+
+
+def work_criteria_view(request, login):
+    return render(request, 'personal_profile/work_criteria.html', context={})
 
 
 @login_required

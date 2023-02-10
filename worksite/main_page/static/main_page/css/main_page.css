@@ -76,19 +76,18 @@ body {
 
 
 /* FOOTER */
-.wrapper {
-    height: 100%
-}
-
 .content {
-    box-sizing: border-box;
-    min-height: 78%;
-    padding-bottom: 90px;
+    min-height: 100%;
+
 }
 
-.py-3 {
-    height: 80px;
-    margin-top: -80px;
+.push {
+    height: 40px;
+}
+
+.footer {
+    min-height: 100px;
+    margin-bottom: -100px;
 }
 
 /* MAIN CONTENT */
