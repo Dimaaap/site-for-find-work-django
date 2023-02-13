@@ -7,23 +7,13 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from jobseeker.models import JobseekerRegisterInfo
 from .services.db_utils import *
-from .services.utils import update_form_data, update_cv_field_in_model
+from .services.utils import (update_form_data, update_cv_field_in_model,
+                             create_jobseeker_profile_service)
 from .services.file_utils import *
 from .models import JobseekerProfileInfo
 from .forms import ProfileInfoForm, ProfilePhotoForm
 
 logger = logging.getLogger(__name__)
-
-
-def create_jobseeker_profile_service(jobseeker: callable, key: str, value):
-    try:
-        jobseeker_data = get_fields_from_db(JobseekerProfileInfo, key, value)
-        jobseeker_profile = jobseeker_data
-        return jobseeker_profile
-    except ObjectDoesNotExist:
-        jobseeker_profile = JobseekerProfileInfo(jobseeker=jobseeker)
-        jobseeker_profile.save()
-        return jobseeker_profile
 
 
 @login_required
@@ -42,7 +32,7 @@ def main_profile_page_view(request, login):
     context['jobseeker_profile'] = jobseeker_profile
     if profile_data_form.is_valid():
         logger.info('User got data for links form')
-        cv_file = request.FILES.get('cv_file')
+        cv_file = request.FILES.get('cv_file', False)
         if cv_file and validate_file_extension(str(cv_file)):
             new_data = profile_data_form.save(commit=False)
             new_data.cv_file = cv_file
@@ -52,6 +42,7 @@ def main_profile_page_view(request, login):
                                  filter_args=arguments)
                 context['jobseeker_profile'] = jobseeker_profile
                 if request.FILES:
+                    context['request_files'] = request.FILES
                     context['cv_file'] = os.path.basename(str(cv_file))
                     if update_cv_field_in_model(model=JobseekerProfileInfo, tuple_args=arguments,
                                                 cv_file=cv_file):
@@ -64,9 +55,6 @@ def main_profile_page_view(request, login):
                 new_data.save()
                 logger.info('Successfully adding write to db')
             messages.success(request, 'Ваші дані успішно додано')
-        else:
-            cv_file = ''
-            messages.error(request, 'Неправильний формат файлу')
     return render(request, template_name='personal_profile/main_profile_page.html', context=context)
 
 

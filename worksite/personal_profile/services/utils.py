@@ -1,17 +1,12 @@
+from django.core.exceptions import ObjectDoesNotExist
+
 from .check_cleaned_data import check_cleaned_data
 from .db_utils import filter_fields_from_db, get_fields_from_db
+from ..models import JobseekerProfileInfo
 
 
 def update_form_data(form: callable, model: callable, filter_args: tuple):
-    """
-    The function that implements the system of updating data in the
-    model model. Receives the form form, cleans its built-in
-    dictionary cleaned_data, which stores the data entered by the user,
-    leaving only those that the user passed not empty,
-    and updates the entry in the model model based on this cleaned dictionary
-    filter_args - is a tuple with 2 elements where first element is a key for function
-    filter_fields_from_db, and second element is a value for this function
-    """
+
     fields = dict(form.cleaned_data).keys()
     list_fields = list(fields)
     check_cleaned_data(list_fields, form.cleaned_data)
@@ -33,3 +28,12 @@ def update_cv_field_in_model(model: callable, tuple_args: tuple, cv_file: open):
     return True
 
 
+def create_jobseeker_profile_service(jobseeker: callable, key: str, value):
+    try:
+        jobseeker_data = get_fields_from_db(JobseekerProfileInfo, key, value)
+        jobseeker_profile = jobseeker_data
+        return jobseeker_profile
+    except ObjectDoesNotExist:
+        jobseeker_profile = JobseekerProfileInfo(jobseeker=jobseeker)
+        jobseeker_profile.save()
+        return jobseeker_profile

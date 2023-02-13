@@ -7,7 +7,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 def validate_file_extension(file):
     file_extension = os.path.splitext(file)[-1]
     allowed_extensions = ['.pdf', '.docx', '.doc']
-    if file_extension in allowed_extensions:
+    if file_extension in allowed_extensions or not file_extension:
         return True
     return False
 

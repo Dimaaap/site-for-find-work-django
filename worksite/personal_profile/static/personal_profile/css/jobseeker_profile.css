@@ -334,4 +334,14 @@ footer {
     border: 2px solid green;
 }
 
+.remind-password-link {
+    margin-bottom: 30px;
+    clear: left;
+
+    font-family: 'Rubik';
+}
+
+.remind-password-link a {
+    text-decoration: none;
+}
 

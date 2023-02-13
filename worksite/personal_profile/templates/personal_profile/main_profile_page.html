@@ -124,5 +124,7 @@
             </div>
         {% endfor %}
     </form>
-    <a href="{% url 'remind_password' %}">Скинути пароль</a>
+    <div class="remind-password-link">
+        <a href="{% url 'remind_password' jobseeker.login %}">Скинути пароль</a>
+    </div>
 {% endblock %}
