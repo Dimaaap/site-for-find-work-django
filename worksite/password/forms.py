@@ -14,9 +14,9 @@ class PasswordRemindRequestForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
         jobseeker = JobseekerRegisterInfo.objects.filter(email=email)
-        if not jobseeker or email != settings.DEBUG_EMAIL:
-            raise ValidationError('Жоден користувач сайту не зареєстрований з таким email')
-        return email
+        if jobseeker or email == settings.DEBUG_EMAIL:
+            return email
+        return ValidationError('Жоден користувач сайту не зареєстрований з таким email')
 
 
 class PasswordChangeForm(forms.Form):
