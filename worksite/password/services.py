@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -23,3 +25,7 @@ def send_email_service(html_context: dict, template_path: str):
         return True
     return False
 
+
+def comparing_two_dates(second_time: datetime, period: int | float = 12,
+                        first_time: datetime = datetime.now()):
+    return first_time >= second_time + timedelta(hours=period)

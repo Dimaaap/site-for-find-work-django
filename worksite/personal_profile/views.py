@@ -26,7 +26,7 @@ def main_profile_page_view(request, login):
     #                   'telegram': jobseeker_profile.telegram,
     #                   'linkedin': jobseeker_profile.linkedin,
     #                   'git_hub': jobseeker_profile.git_hub}
-    profile_data_form = ProfileInfoForm(request.POST or None)#initial=initial_values)
+    profile_data_form = ProfileInfoForm(request.POST or None)  # initial=initial_values)
     context['first_form'] = profile_data_form
     second_form = ProfilePhotoForm(request.POST or None)
     context['second_form'] = second_form

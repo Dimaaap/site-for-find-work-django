@@ -1,6 +1,5 @@
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 import functools
-from json import dumps
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -10,27 +9,7 @@ from django.contrib import messages
 from .forms import PasswordRemindRequestForm, PasswordChangeForm
 from .services import jobseeker_change_password_service, send_email_service
 from jobseeker.models import JobseekerRegisterInfo
-
-
-def limiter_access_in_time(view_function, redirect_url='jobseeker-profile'):
-    # -------------------------------
-    # TODO: FIXED IT
-    # -------------------------------
-    @functools.wraps(view_function)
-    def inner(request, *args, **kwargs):
-        current_time = datetime.now()
-        if (request.session.get('last_access') is None or
-                current_time >= datetime.strptime(request.session.get('last_access'),
-                                                  settings.DATE_FORMAT) + timedelta(minutes=30)):
-            print(f'{datetime.now().isoformat()}-dasdisajdisad')
-            request.session['last_access'] = dumps(datetime.now().isoformat())
-            print("I`m here")
-            return view_function(request, *args, **kwargs)
-        else:
-            print("Time access")
-            return redirect(redirect_url)
-
-    return inner
+from .decorators import limiter_access_in_time
 
 
 @login_required
