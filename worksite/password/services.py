@@ -28,4 +28,4 @@ def send_email_service(html_context: dict, template_path: str):
 
 def comparing_two_dates(second_time: datetime, period: int | float = 12,
                         first_time: datetime = datetime.now()):
-    return first_time >= second_time + timedelta(hours=period)
+    return first_time >= second_time + timedelta(seconds=3)

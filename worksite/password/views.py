@@ -18,9 +18,10 @@ def remind_password_view(request, login):
     request_user = JobseekerRegisterInfo.objects.get(login=login)
     token = request_user.get_reset_password_token()
     request.session['login'] = login
-    context = {}
+    context = {'login': login}
     if request.method == 'POST':
         form = PasswordRemindRequestForm(request.POST)
+        print('dsadsadsa')
         if form.is_valid():
             email = str(form.cleaned_data.get('email')).strip()
             if email == request_user.email or email == settings.DEBUG_EMAIL:

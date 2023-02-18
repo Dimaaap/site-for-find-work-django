@@ -15,8 +15,8 @@ def limiter_access_in_time(view_function, redirect_url='jobseeker_profile'):
         string_strptime = datetime.strptime(request.session['last_access'], settings.DATE_FORMAT)
         if (request.session.get('last_access') is None
                 or comparing_two_dates(second_time=string_strptime)):
-            request.session['last_access'] = str(current_datetime)
             request.session['access'] = True
+            request.session['last_access'] = str(current_datetime)
             return view_function(request, *args, **kwargs)
         else:
             request.session['access'] = False

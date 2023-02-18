@@ -47,6 +47,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'password.middleware.TimeAccessMiddleware',
+
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
