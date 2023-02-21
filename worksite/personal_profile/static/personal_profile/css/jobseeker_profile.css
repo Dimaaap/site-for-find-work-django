@@ -341,7 +341,18 @@ footer {
     font-family: 'Rubik';
 }
 
+.remind-password-link-disabled {
+    display: block-inline;
+    max-width: 150px;
+    margin-bottom: 30px;
+    font-family: 'Rubik';
+    color: #A1BBD5;
+}
+
 .remind-password-link a {
     text-decoration: none;
 }
 
+.remind-password-link-disabled a {
+    text-decoration: none;
+}

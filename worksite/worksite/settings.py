@@ -47,7 +47,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'password.middleware.TimeAccessMiddleware',
+    #'password.middleware.TimeAccessMiddleware',
 
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
@@ -184,4 +184,6 @@ DEBUG_EMAIL = config('DEBUG_EMAIL')
 
 # DATETIME
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
+TIME_FORMAT = '%H:%M:%S.%f'
 PASSWORD_CHANGE_FREQUENCY = 12
+SIX_HOURS_IN_SECONDS = 60 * 60 * 6

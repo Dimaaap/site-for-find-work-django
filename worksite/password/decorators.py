@@ -1,26 +1,29 @@
-import functools
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 from django.conf import settings
 from django.shortcuts import redirect
 from django.contrib import messages
 
-from .services import comparing_two_dates
 
+def limiter_time_view(view_func: callable, redirect_url='jobseeker_profile'):
+    def wrapper(request, *args, **kwargs):
+        last_visit_time = request.session.get('last_visit_time')
+        current_time = datetime.now()
+        if last_visit_time:
+            last_visit_time = datetime.strptime(last_visit_time, settings.DATE_FORMAT)
+            time_delta = current_time - last_visit_time
+            if time_delta.total_seconds() < settings.SIX_HOURS_IN_SECONDS:
+                time_left = str(timedelta(seconds=settings.SIX_HOURS_IN_SECONDS -
+                                          time_delta.total_seconds()))
+                messages.error(request, f"Змінювати пароль можна один раз на "
+                                        f"6 годин. Повторіть спробу через {str(time_left)[:1]} "
+                                        f"годин та {time_left[2:4]} хвилин")
+                request.session['time_left'] = str(datetime.strptime(time_left, settings.TIME_FORMAT))
+                request.session['view_access'] = False
+                return redirect(redirect_url, request.session['login'])
+        response = view_func(request, *args, **kwargs)
+        request.session['view_access'] = True
+        request.session['last_visit_time'] = str(current_time)
+        return response
 
-def limiter_access_in_time(view_function, redirect_url='jobseeker_profile'):
-    @functools.wraps(view_function)
-    def inner(request, *args, **kwargs):
-        current_datetime = datetime.now()
-        string_strptime = datetime.strptime(request.session['last_access'], settings.DATE_FORMAT)
-        if (request.session.get('last_access') is None
-                or comparing_two_dates(second_time=string_strptime)):
-            request.session['access'] = True
-            request.session['last_access'] = str(current_datetime)
-            return view_function(request, *args, **kwargs)
-        else:
-            request.session['access'] = False
-            messages.error(request, 'Змінювати пароль можна один раз кожні 12 годин')
-            return redirect(redirect_url, request.session['login'])
-
-    return inner
+    return wrapper

@@ -1,6 +1,10 @@
 {% extends 'main_page/base.html' %}
 
 {% load static %}
+{% block js_additional %}
+    <script src="{% static 'personal_profile/js/main.js' %}" defer></script>
+{% endblock %}
+
 {% block css_additional %}
     <link rel="stylesheet" href="{% static 'personal_profile/css/jobseeker_profile.css' %}">
 {% endblock %}
@@ -124,7 +128,16 @@
             </div>
         {% endfor %}
     </form>
-    <div class="remind-password-link">
-        <a href="{% url 'remind_password' jobseeker.login %}">Змінити пароль</a>
-    </div>
+        <div class="remind-password-link">
+            <a href="{% url 'remind_password' jobseeker.login %}">Змінити пароль</a>
+            <div>Змінити пароль наступного разу можна буде через:</div>
+            <div id="countdown-box" class="text-center-mt">
+                {{ time_left }}
+            </div>
+        </div>
+    {% comment %}
+        <div class="remind-password-link-disabled">
+            <a href="#">Змінити пароль</a>
+        </div>
+    {% endcomment %}
 {% endblock %}

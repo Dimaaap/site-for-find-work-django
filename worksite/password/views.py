@@ -1,6 +1,3 @@
-from datetime import datetime, timedelta
-import functools
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -9,11 +6,11 @@ from django.contrib import messages
 from .forms import PasswordRemindRequestForm, PasswordChangeForm
 from .services import jobseeker_change_password_service, send_email_service
 from jobseeker.models import JobseekerRegisterInfo
-from .decorators import limiter_access_in_time
+from .decorators import limiter_time_view
 
 
 @login_required
-@limiter_access_in_time
+@limiter_time_view
 def remind_password_view(request, login):
     request_user = JobseekerRegisterInfo.objects.get(login=login)
     token = request_user.get_reset_password_token()
@@ -21,7 +18,6 @@ def remind_password_view(request, login):
     context = {'login': login}
     if request.method == 'POST':
         form = PasswordRemindRequestForm(request.POST)
-        print('dsadsadsa')
         if form.is_valid():
             email = str(form.cleaned_data.get('email')).strip()
             if email == request_user.email or email == settings.DEBUG_EMAIL:

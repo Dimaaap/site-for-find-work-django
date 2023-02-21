@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timedelta, time
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -19,7 +20,11 @@ logger = logging.getLogger(__name__)
 @login_required
 def main_profile_page_view(request, login):
     jobseeker = get_fields_from_db(JobseekerRegisterInfo, 'login', login)
-    context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name, 'login': jobseeker.login}
+    time_left = request.session.get('time_left')[11:19]
+    context = {
+        'jobseeker': jobseeker, 'full_name': jobseeker.full_name, 'login': jobseeker.login,
+        'time_left': time_left
+    }
     jobseeker_profile = create_jobseeker_profile_service(jobseeker, 'jobseeker', jobseeker)
 
     # initial_values = {'expected_job': jobseeker_profile.expected_job,
@@ -28,6 +33,7 @@ def main_profile_page_view(request, login):
     #                   'git_hub': jobseeker_profile.git_hub}
     profile_data_form = ProfileInfoForm(request.POST or None)  # initial=initial_values)
     context['first_form'] = profile_data_form
+    context['view_access'] = request.session.get('view_access')
     second_form = ProfilePhotoForm(request.POST or None)
     context['second_form'] = second_form
     context['jobseeker_profile'] = jobseeker_profile
