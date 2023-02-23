@@ -30,3 +30,7 @@ class JobseekerProfileInfo(models.Model):
 
     def base_cv(self):
         return os.path.basename(self.cv_file.name)
+
+
+class WorkCriteria(models.Model):
+    job = models.CharField(max_length=255, blank=True)

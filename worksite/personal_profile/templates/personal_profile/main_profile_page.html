@@ -130,10 +130,6 @@
     </form>
         <div class="remind-password-link">
             <a href="{% url 'remind_password' jobseeker.login %}">Змінити пароль</a>
-            <div>Змінити пароль наступного разу можна буде через:</div>
-            <div id="countdown-box" class="text-center-mt">
-                {{ time_left }}
-            </div>
         </div>
     {% comment %}
         <div class="remind-password-link-disabled">

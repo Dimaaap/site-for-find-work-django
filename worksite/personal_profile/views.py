@@ -20,18 +20,16 @@ logger = logging.getLogger(__name__)
 @login_required
 def main_profile_page_view(request, login):
     jobseeker = get_fields_from_db(JobseekerRegisterInfo, 'login', login)
-    time_left = request.session.get('time_left')[11:19]
-    context = {
-        'jobseeker': jobseeker, 'full_name': jobseeker.full_name, 'login': jobseeker.login,
-        'time_left': time_left
-    }
+    context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name, 'login': jobseeker.login}
     jobseeker_profile = create_jobseeker_profile_service(jobseeker, 'jobseeker', jobseeker)
-
-    # initial_values = {'expected_job': jobseeker_profile.expected_job,
-    #                   'telegram': jobseeker_profile.telegram,
-    #                   'linkedin': jobseeker_profile.linkedin,
-    #                   'git_hub': jobseeker_profile.git_hub}
-    profile_data_form = ProfileInfoForm(request.POST or None)  # initial=initial_values)
+    if jobseeker_profile:
+        initial_values = {'expected_job': jobseeker_profile.expected_job,
+                          'telegram': jobseeker_profile.telegram,
+                          'linkedin': jobseeker_profile.linkedin,
+                          'git_hub': jobseeker_profile.git_hub}
+        profile_data_form = ProfileInfoForm(request.POST or None, initial=initial_values)
+    else:
+        profile_data_form = ProfileInfoForm(request.POST or None)
     context['first_form'] = profile_data_form
     context['view_access'] = request.session.get('view_access')
     second_form = ProfilePhotoForm(request.POST or None)
@@ -43,6 +41,7 @@ def main_profile_page_view(request, login):
         if cv_file and validate_file_extension(str(cv_file)):
             new_data = profile_data_form.save(commit=False)
             new_data.cv_file = cv_file
+            new_data.jobseeker = jobseeker
             if jobseeker_profile:
                 arguments = ('jobseeker', jobseeker)
                 update_form_data(form=profile_data_form, model=JobseekerProfileInfo,

@@ -31,9 +31,11 @@ def update_cv_field_in_model(model: callable, tuple_args: tuple, cv_file: open):
 def create_jobseeker_profile_service(jobseeker: callable, key: str, value):
     try:
         jobseeker_data = get_fields_from_db(JobseekerProfileInfo, key, value)
+
         jobseeker_profile = jobseeker_data
         return jobseeker_profile
     except ObjectDoesNotExist:
         jobseeker_profile = JobseekerProfileInfo(jobseeker=jobseeker)
         jobseeker_profile.save()
+        print(jobseeker_profile)
         return jobseeker_profile

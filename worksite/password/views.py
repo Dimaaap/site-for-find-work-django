@@ -10,7 +10,6 @@ from .decorators import limiter_time_view
 
 
 @login_required
-@limiter_time_view
 def remind_password_view(request, login):
     request_user = JobseekerRegisterInfo.objects.get(login=login)
     token = request_user.get_reset_password_token()
@@ -35,6 +34,7 @@ def remind_password_view(request, login):
 
 
 @login_required
+@limiter_time_view
 def change_password_page(request, token):
     context = {}
     jobseeker = JobseekerRegisterInfo.verify_reset_password_token(token)
