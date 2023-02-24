@@ -45,23 +45,11 @@ class JobseekerRegisterForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        # try:
-        #     user = get_write_from_model(JobseekerRegisterInfo, 'email', email)
-        #     if user:
-        #         logger.warning("User`s email have registered is site yet")
-        #         raise forms.ValidationError('Користувач з таким email вже зареєстрований на сайті')
-        #     return email
-        # except Exception:
-        #     return email
         user = get_write_from_model(JobseekerRegisterInfo, 'email', email)
         if user:
             logger.warning("User`s email have registered is site yet")
             raise forms.ValidationError('Користувач з таким email вже зареєстрований на сайті')
         return email
-        # if email in select_field_value_from_model(JobseekerRegisterInfo, 'email', email):
-        #     logger.warning("User's email have been registered in site yet")
-        #     raise forms.ValidationError('Користувач з таким email вже зареєстрований на сайті')
-        # return email
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data['phone_number']

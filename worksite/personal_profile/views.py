@@ -1,10 +1,8 @@
 import logging
-from datetime import datetime, timedelta, time
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.exceptions import ObjectDoesNotExist
 
 from jobseeker.models import JobseekerRegisterInfo
 from .services.db_utils import *
@@ -13,15 +11,12 @@ from .services.utils import (update_form_data, update_cv_field_in_model,
 from .services.file_utils import *
 from .models import JobseekerProfileInfo
 from .forms import ProfileInfoForm, ProfilePhotoForm
+from .form_processor import FormProcessor
 
 logger = logging.getLogger(__name__)
 
 
-@login_required
-def main_profile_page_view(request, login):
-    jobseeker = get_fields_from_db(JobseekerRegisterInfo, 'login', login)
-    context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name, 'login': jobseeker.login}
-    jobseeker_profile = create_jobseeker_profile_service(jobseeker, 'jobseeker', jobseeker)
+def set_field_initial_values(request, jobseeker_profile: JobseekerProfileInfo):
     if jobseeker_profile:
         initial_values = {'expected_job': jobseeker_profile.expected_job,
                           'telegram': jobseeker_profile.telegram,
@@ -30,38 +25,49 @@ def main_profile_page_view(request, login):
         profile_data_form = ProfileInfoForm(request.POST or None, initial=initial_values)
     else:
         profile_data_form = ProfileInfoForm(request.POST or None)
+    return profile_data_form
+
+
+@login_required
+def main_profile_page_view(request, login):
+    jobseeker = get_fields_from_db(JobseekerRegisterInfo, 'login', login)
+    context = {'jobseeker': jobseeker, 'full_name': jobseeker.full_name,
+               'login': jobseeker.login}
+    jobseeker_profile = create_jobseeker_profile_service(jobseeker, 'jobseeker', jobseeker)
+    profile_data_form = set_field_initial_values(request, jobseeker_profile)
     context['first_form'] = profile_data_form
     context['view_access'] = request.session.get('view_access')
     second_form = ProfilePhotoForm(request.POST or None)
     context['second_form'] = second_form
     context['jobseeker_profile'] = jobseeker_profile
     if profile_data_form.is_valid():
-        logger.info('User got data for links form')
-        cv_file = request.FILES.get('cv_file', False)
-        if cv_file and validate_file_extension(str(cv_file)):
-            new_data = profile_data_form.save(commit=False)
-            new_data.cv_file = cv_file
-            new_data.jobseeker = jobseeker
-            if jobseeker_profile:
-                arguments = ('jobseeker', jobseeker)
-                update_form_data(form=profile_data_form, model=JobseekerProfileInfo,
-                                 filter_args=arguments)
-                context['jobseeker_profile'] = jobseeker_profile
-                if request.FILES:
-                    context['request_files'] = request.FILES
-                    context['cv_file'] = os.path.basename(str(cv_file))
-                    if update_cv_field_in_model(model=JobseekerProfileInfo, tuple_args=arguments,
-                                                cv_file=cv_file):
-                        logger.info('success adding a file to db')
-                    else:
-                        logger.error('Error adding file in update_cv_field_in_model function')
+        # cv_file = request.FILES.get('cv_file', False)
+        # if cv_file and validate_file_extension(str(cv_file)):
+        #     new_data = profile_data_form.save(commit=False)
+        #     new_data.cv_file = cv_file
+        #     new_data.jobseeker = jobseeker
+        cv_file = FormProcessor.profile_data_form_process(request, jobseeker, profile_data_form)
+        if jobseeker_profile:
+            arguments = ('jobseeker', jobseeker)
+            update_form_data(form=profile_data_form, model=JobseekerProfileInfo,
+                             filter_args=arguments)
+            context['jobseeker_profile'] = jobseeker_profile
+            if request.FILES:
+                context['request_files'] = request.FILES
+                context['cv_file'] = os.path.basename(str(cv_file))
+                if update_cv_field_in_model(model=JobseekerProfileInfo, tuple_args=arguments,
+                                            cv_file=cv_file):
+                    logger.info('success adding a file to db')
                 else:
-                    context['cv_file'] = os.path.basename(str(jobseeker_profile.cv_file))
+                    logger.error('Error adding file in update_cv_field_in_model function')
             else:
-                new_data.save()
-                logger.info('Successfully adding write to db')
-            messages.success(request, 'Ваші дані успішно додано')
-    return render(request, template_name='personal_profile/main_profile_page.html', context=context)
+                context['cv_file'] = os.path.basename(str(jobseeker_profile.cv_file))
+        else:
+            new_data.save()
+            logger.info('Successfully adding write to db')
+        messages.success(request, 'Ваші дані успішно додано')
+    return render(request, template_name='personal_profile/main_profile_page.html',
+                  context=context)
 
 
 @login_required

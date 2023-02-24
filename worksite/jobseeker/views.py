@@ -1,14 +1,13 @@
 import logging
 
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout, login
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .forms import JobseekerRegisterForm, JobseekerLoginForm, CodeForm
-from .models import JobseekerRegisterInfo
 from .services.custom_errors import *
-from .services.db_functions import create_user_login
+from .services.session_utils import unpack_session_tuple_in_user
 from .services.form_processor import FormProcessor
 from .decorators import redirect_login_user
 
@@ -52,31 +51,21 @@ def jobseeker_register_view(request):
     return render(request, template_name='jobseeker/jobseeker_register.html', context=context)
 
 
+@redirect_login_user
 def verificate_number_view(request):
     context = {'title': 'Підтвердження номеру'}
-    if request.user.is_authenticated:
-        return redirect('index_page', permanent=True)
-    form = CodeForm(request.POST or None)
-    session_tuple = request.session['session_tuple']
-    context['form'] = form
-    user_login = create_user_login(session_tuple[2])
-    user = JobseekerRegisterInfo(full_name=session_tuple[0],
-                                 phone_number=session_tuple[1],
-                                 email=session_tuple[2],
-                                 password=session_tuple[3],
-                                 login=user_login)
-    if user.email:
+    if request.method == 'POST':
+        form = CodeForm(request.POST)
+        session_tuple = request.session['session_tuple']
+        user = unpack_session_tuple_in_user(session_tuple)
         code = request.session.get('session_tuple')[-1]
         if form.is_valid():
-            num = form.cleaned_data.get('number')
-            if str(code) == num:
-                user.save()
-                request.session['login'] = user_login
-                login(request, user, backend='jobseeker.authentication.WithoutPasswordBackend')
-                return redirect('jobseeker_profile', user.login)
-            else:
-                messages.error(request, 'Введено неправильний код')
-
+            FormProcessor.code_verificate_form_processor(form, request, code, user)
+        else:
+            messages.error(request, 'Введено неправильний код')
+    else:
+        form = CodeForm()
+    context['form'] = form
     return render(request, template_name='jobseeker/code_verify.html', context=context)
 
 
