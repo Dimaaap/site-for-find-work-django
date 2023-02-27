@@ -28,6 +28,7 @@ INSTALLED_APPS = [
 
     'captcha',
     "debug_toolbar",
+    'django_select2',
 
 ]
 
@@ -47,10 +48,20 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    #'password.middleware.TimeAccessMiddleware',
-
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+
+# CACHES = {
+#     'select2': {
+#         'BACKEND': 'django_redis.cache.RedisCache',
+#         'LOCATION': "redis://127.0.0.1:6379/2",
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient'
+#         }
+#     }
+# }
+#
+# SELECT2_CACHE_BACKEND = 'select2'
 
 # LOGGING
 LOGGING = {
@@ -177,7 +188,6 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS')
 EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-
 
 # PERSONAL DATA
 DEBUG_EMAIL = config('DEBUG_EMAIL')

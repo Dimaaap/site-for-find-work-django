@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import JobseekerProfileInfo
+from .models import JobseekerProfileInfo, WorkCriteria
 
 
 class ProfileInfoForm(forms.ModelForm):
@@ -33,4 +33,8 @@ class ProfilePhotoForm(forms.Form):
                              widget=forms.FileInput(attrs={'class': 'user-avatar'}))
 
 
+class WorkCriteriaForm(forms.ModelForm):
+    class Meta:
+        model = WorkCriteria
+        fields = '__all__'
 

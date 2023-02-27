@@ -3,6 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from .check_cleaned_data import check_cleaned_data
 from .db_utils import filter_fields_from_db, get_fields_from_db
 from ..models import JobseekerProfileInfo
+from ..forms import ProfileInfoForm
 
 
 def update_form_data(form: callable, model: callable, filter_args: tuple):
@@ -39,3 +40,15 @@ def create_jobseeker_profile_service(jobseeker: callable, key: str, value):
         jobseeker_profile.save()
         print(jobseeker_profile)
         return jobseeker_profile
+
+
+def set_field_initial_values(request, jobseeker_profile: JobseekerProfileInfo):
+    if jobseeker_profile:
+        initial_values = {'expected_job': jobseeker_profile.expected_job,
+                          'telegram': jobseeker_profile.telegram,
+                          'linkedin': jobseeker_profile.linkedin,
+                          'git_hub': jobseeker_profile.git_hub}
+        profile_data_form = ProfileInfoForm(request.POST or None, initial=initial_values)
+    else:
+        profile_data_form = ProfileInfoForm(request.POST or None)
+    return profile_data_form

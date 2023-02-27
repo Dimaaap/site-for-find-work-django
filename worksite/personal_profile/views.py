@@ -7,25 +7,12 @@ from django.contrib import messages
 from jobseeker.models import JobseekerRegisterInfo
 from .services.db_utils import *
 from .services.utils import (update_form_data, update_cv_field_in_model,
-                             create_jobseeker_profile_service)
+                             create_jobseeker_profile_service, set_field_initial_values)
 from .services.file_utils import *
 from .models import JobseekerProfileInfo
-from .forms import ProfileInfoForm, ProfilePhotoForm
-from .form_processor import FormProcessor
+from .forms import ProfilePhotoForm, WorkCriteriaForm
 
 logger = logging.getLogger(__name__)
-
-
-def set_field_initial_values(request, jobseeker_profile: JobseekerProfileInfo):
-    if jobseeker_profile:
-        initial_values = {'expected_job': jobseeker_profile.expected_job,
-                          'telegram': jobseeker_profile.telegram,
-                          'linkedin': jobseeker_profile.linkedin,
-                          'git_hub': jobseeker_profile.git_hub}
-        profile_data_form = ProfileInfoForm(request.POST or None, initial=initial_values)
-    else:
-        profile_data_form = ProfileInfoForm(request.POST or None)
-    return profile_data_form
 
 
 @login_required
@@ -41,12 +28,11 @@ def main_profile_page_view(request, login):
     context['second_form'] = second_form
     context['jobseeker_profile'] = jobseeker_profile
     if profile_data_form.is_valid():
-        # cv_file = request.FILES.get('cv_file', False)
-        # if cv_file and validate_file_extension(str(cv_file)):
-        #     new_data = profile_data_form.save(commit=False)
-        #     new_data.cv_file = cv_file
-        #     new_data.jobseeker = jobseeker
-        cv_file = FormProcessor.profile_data_form_process(request, jobseeker, profile_data_form)
+        cv_file = request.FILES.get('cv_file', False)
+        if cv_file and validate_file_extension(str(cv_file)):
+            new_data = profile_data_form.save(commit=False)
+            new_data.cv_file = cv_file
+            new_data.jobseeker = jobseeker
         if jobseeker_profile:
             arguments = ('jobseeker', jobseeker)
             update_form_data(form=profile_data_form, model=JobseekerProfileInfo,
@@ -98,7 +84,9 @@ def set_user_image_view(request, login):
 
 
 def work_criteria_view(request, login):
-    return render(request, 'personal_profile/work_criteria.html', context={})
+    work_criteria_form = WorkCriteriaForm(request.POST or None)
+    return render(request, 'personal_profile/work_criteria.html',
+                  context={'form': work_criteria_form})
 
 
 @login_required

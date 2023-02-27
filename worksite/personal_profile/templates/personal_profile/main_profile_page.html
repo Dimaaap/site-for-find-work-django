@@ -14,25 +14,7 @@
     <div class="pre-form-title-wrapper">
         <p class="pre-form-title">Ваші персональні дані побачать лише ті, кому ви відкриєте доступ</p>
     </div>
-    <!--{% if list_first_error %}
-        <div class="form-error">{{ list_first_error|escape }}</div>
-    {% endif %} -->
-    <!--{% if messages %}
-
-    {% endif %} -->
-    <!--{% if messages %}
-        {% for message in messages %}
-          {% if message.tags != 'error' %}
-            <div class="alert alert-{{ message.tags }} m-2" id="msg" role="alert">
-              {{ message }}
-            </div>
-          {% else %}
-            <div class="alert alert-danger m-2" id="danger-msg" role="alert">
-              {{ message }}
-            </div>
-          {% endif %}
-        {% endfor %}
-    {% endif %}-->
+    <a href="{% url 'work-criteria' jobseeker.login %}">Профіль</a>
     {% if messages %}
     {% for message in messages %}
         {% if message.tags != 'error' %}

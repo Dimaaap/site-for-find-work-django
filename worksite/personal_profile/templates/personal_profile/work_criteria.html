@@ -1,0 +1,13 @@
+{% extends 'main_page/base.html' %}
+
+{% load static %}
+{% block css_additional %}
+    <link rel="stylesheet" href="{% static 'personal_profile/css/work_criteria.css' %}">
+{% endblock %}
+
+{% block body %}
+    <form method="POST" class="work-criteria">
+        {% csrf_token %}
+        {{ form.as_p }}
+    </form>
+{% endblock %}
