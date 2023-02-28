@@ -1,14 +1,13 @@
 import requests
 from pathlib import Path
-
 from bs4 import BeautifulSoup
 
 
-class Country:
+class Countries:
     url = "https://merkator.org.ua/dovidnyk/spysok-krajin-svitu-za-alfavitom/"
 
 
-class CountryFile(Country):
+class CountryFile(Countries):
     def __init__(self):
         self.filename = 'countries.html'
 
@@ -42,9 +41,10 @@ class CountryFileParser(CountryFile):
     def parse_soup(self):
         table_body = self.soup.find('tbody')
         country_titles = table_body.find_all(class_='column-2')
+        country_title_list = []
         for title in country_titles:
-            print(title.text)
+            country_title_list.append(title.text)
+        return country_title_list
 
 
-a = CountryFileParser()
-print(a.parse_soup())
+
