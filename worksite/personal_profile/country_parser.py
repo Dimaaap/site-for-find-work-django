@@ -2,6 +2,8 @@ import requests
 from pathlib import Path
 from bs4 import BeautifulSoup
 
+from .models import Country
+
 
 class Countries:
     url = "https://merkator.org.ua/dovidnyk/spysok-krajin-svitu-za-alfavitom/"
@@ -29,7 +31,16 @@ class CountryFile(Countries):
                 return file.read()
 
 
-class CountryFileParser(CountryFile):
+class CountryFileInterface:
+
+    def get_soup(self):
+        raise NotImplemented
+
+    def parse_soup(self):
+        raise NotImplemented
+
+
+class CountryFileParser(CountryFile, CountryFileInterface):
 
     def __init__(self):
         super().__init__()
@@ -45,6 +56,24 @@ class CountryFileParser(CountryFile):
         for title in country_titles:
             country_title_list.append(title.text)
         return country_title_list
+
+
+class SaverInterface:
+
+    def save_data(self):
+        raise NotImplemented
+
+
+class DBSaver(SaverInterface):
+
+    def __init__(self, dbname):
+        self.dbname = dbname
+
+    def save_data(self):
+        new_parser = CountryFileParser()
+        for country in new_parser.parse_soup():
+            new_country = self.dbname(title=country)
+            new_country.save()
 
 
 

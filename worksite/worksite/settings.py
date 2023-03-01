@@ -28,7 +28,6 @@ INSTALLED_APPS = [
 
     'captcha',
     "debug_toolbar",
-    'django_select2',
 
 ]
 
@@ -51,19 +50,6 @@ MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
-# CACHES = {
-#     'select2': {
-#         'BACKEND': 'django_redis.cache.RedisCache',
-#         'LOCATION': "redis://127.0.0.1:6379/2",
-#         'OPTIONS': {
-#             'CLIENT_CLASS': 'django_redis.client.DefaultClient'
-#         }
-#     }
-# }
-#
-# SELECT2_CACHE_BACKEND = 'select2'
-
-# LOGGING
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -197,3 +183,16 @@ DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 TIME_FORMAT = '%H:%M:%S.%f'
 PASSWORD_CHANGE_FREQUENCY = 12
 SIX_HOURS_IN_SECONDS = 60 * 60 * 6
+
+EXPERIENCE_CHOICE = (
+        ('0', '0'),
+        ('0.6', '0.6'),
+        ('1', '1'),
+        ('1.5', '1.5'),
+        ('2', '2'),
+        ('2.5', '2.5'),
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5'),
+        ('10', '10')
+    )

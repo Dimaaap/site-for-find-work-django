@@ -8,4 +8,7 @@ __pycache__
 .idea
 *.log
 media
+city_parser.py
+country_parser.py
+countries.html
 

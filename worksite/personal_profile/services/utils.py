@@ -2,8 +2,10 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from .check_cleaned_data import check_cleaned_data
 from .db_utils import filter_fields_from_db, get_fields_from_db
-from ..models import JobseekerProfileInfo
+from ..models import JobseekerProfileInfo, Country, City
 from ..forms import ProfileInfoForm
+from ..country_parser import DBSaver
+from ..city_parser import DBSaver as CitySaver
 
 
 def update_form_data(form: callable, model: callable, filter_args: tuple):
@@ -52,3 +54,5 @@ def set_field_initial_values(request, jobseeker_profile: JobseekerProfileInfo):
     else:
         profile_data_form = ProfileInfoForm(request.POST or None)
     return profile_data_form
+
+

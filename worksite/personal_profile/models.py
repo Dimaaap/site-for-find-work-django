@@ -2,7 +2,7 @@ import os
 
 from django.db import models
 from django.core.validators import FileExtensionValidator
-from django_select2 import forms
+from django.conf import settings
 
 from jobseeker.models import JobseekerRegisterInfo
 
@@ -65,6 +65,7 @@ class WorkCriteria(models.Model):
     position = models.ForeignKey(Position, on_delete=models.CASCADE, blank=True)
     salary_expectations = models.PositiveIntegerField(default=0)
     hourly_rate = models.PositiveIntegerField(blank=True)
+    experience = models.CharField(max_length=5, choices=settings.EXPERIENCE_CHOICE, default='0')
     country = models.ForeignKey(Country, on_delete=models.CASCADE, blank=True)
     city = models.ForeignKey(City, on_delete=models.CASCADE, blank=True)
     moving_to_another_city = models.BooleanField(default=False)
@@ -76,4 +77,3 @@ class WorkCriteria(models.Model):
 
     def __str__(self):
         return f'{self.jobseeker} Profile'
-
