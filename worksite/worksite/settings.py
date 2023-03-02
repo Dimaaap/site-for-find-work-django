@@ -28,6 +28,7 @@ INSTALLED_APPS = [
 
     'captcha',
     "debug_toolbar",
+    "django_select2",
 
 ]
 

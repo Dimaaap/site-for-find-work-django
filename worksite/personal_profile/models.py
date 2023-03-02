@@ -60,6 +60,13 @@ class Category(models.Model):
         return self.title
 
 
+class SpeakingLanguage(models.Model):
+    title = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.title
+
+
 class WorkCriteria(models.Model):
     jobseeker = models.OneToOneField(JobseekerRegisterInfo, on_delete=models.CASCADE)
     position = models.ForeignKey(Position, on_delete=models.CASCADE, blank=True)
@@ -74,6 +81,7 @@ class WorkCriteria(models.Model):
     expectations = models.TextField(blank=True)
     achievements = models.TextField(blank=True)
     questions_to_employers = models.TextField(blank=True)
+    speaking_language = models.ForeignKey(SpeakingLanguage, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return f'{self.jobseeker} Profile'

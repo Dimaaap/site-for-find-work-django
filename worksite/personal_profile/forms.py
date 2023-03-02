@@ -1,7 +1,8 @@
 from django import forms
 from django.conf import settings
+from django_select2 import forms as d2forms
 
-from .models import JobseekerProfileInfo, WorkCriteria, City, Country
+from .models import JobseekerProfileInfo, WorkCriteria, City, Country, Category
 
 
 class ProfileInfoForm(forms.ModelForm):
@@ -52,7 +53,7 @@ class WorkCriteriaForm(forms.ModelForm):
     KYIV = City.objects.get(title='Київ')
 
     position = forms.CharField(required=False, label='Посада',
-                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+                               widget=PositionWidget)
     salary_expectations = forms.IntegerField(required=False, label='Зарплатні очікування',
                                              widget=forms.NumberInput(attrs={'class':
                                                                                  'form-control'}),
@@ -60,7 +61,7 @@ class WorkCriteriaForm(forms.ModelForm):
     hourly_rate = forms.IntegerField(required=False, label='Погодинна ставка',
                                      widget=forms.NumberInput(attrs={'class': 'form-control'}))
 
-    experience = forms.ChoiceField(choices=settings.EXPERIENCE_CHOICE)
+    experience = forms.ChoiceField(label='Досвід роботи', choices=settings.EXPERIENCE_CHOICE)
     country = forms.ModelChoiceField(label='Країна', queryset=ALL_COUNTRIES, initial=UKRAINE,
                                      required=False,
                                      widget=forms.Select(attrs={'class': 'form-control'}))
@@ -68,3 +69,12 @@ class WorkCriteriaForm(forms.ModelForm):
                                   required=False,
                                   widget=forms.Select(attrs={'class': 'form-control'}))
     moving_to_another_city = forms.BooleanField(label='Розглядаю переїзд в інше місто')
+    category = forms.ModelChoiceField(label='Категорія', queryset=Category.objects.all(),
+                                      required=False,
+                                      widget=forms.Select(attrs={'class': 'form-control'}))
+    work_experience = forms.CharField(label='Розкажіть про ваш досвід', required=False,
+                                      widget=forms.Textarea())
+    expectations = forms.CharField(label='Очікування', required=False, widget=forms.Textarea())
+    achievements = forms.CharField(label='Досягнення', required=False, widget=forms.Textarea())
+    questions_to_employers = forms.CharField(label='Питання до роботодавця', required=False,
+                                             widget=forms.Textarea())
