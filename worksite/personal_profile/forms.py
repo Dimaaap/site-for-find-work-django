@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django_select2 import forms as d2forms
 
-from .models import JobseekerProfileInfo, WorkCriteria, City, Country, Category
+from .models import JobseekerProfileInfo, WorkCriteria, City, Country, Category, Position
 
 
 class ProfileInfoForm(forms.ModelForm):
@@ -51,9 +51,13 @@ class WorkCriteriaForm(forms.ModelForm):
     UKRAINE = Country.objects.get(title='Україна')
     ALL_CITIES = City.objects.all()
     KYIV = City.objects.get(title='Київ')
+    ALL_POSITIONS = Position.objects.all()
+    FIRST_POSITION = ALL_POSITIONS.first()
 
-    position = forms.CharField(required=False, label='Посада',
-                               widget=PositionWidget)
+    position = forms.ModelChoiceField(required=False, label='Посада', queryset=ALL_POSITIONS,
+                                      initial=FIRST_POSITION.title,
+                                      widget=forms.Select(attrs={'class': 'form-control',
+                                                                    'id': 'add-position'}))
     salary_expectations = forms.IntegerField(required=False, label='Зарплатні очікування',
                                              widget=forms.NumberInput(attrs={'class':
                                                                                  'form-control'}),

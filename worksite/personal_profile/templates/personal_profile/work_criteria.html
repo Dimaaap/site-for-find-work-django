@@ -13,4 +13,9 @@
             {{ field }}
         {% endfor %}
     </form>
+    <script>
+        $(document).ready(function() {
+            $("#add-position").select2()
+        })
+    </script>
 {% endblock %}

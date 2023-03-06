@@ -85,7 +85,6 @@ def set_user_image_view(request, login):
 
 def work_criteria_view(request, login):
     work_criteria_form = WorkCriteriaForm(request.POST or None)
-
     return render(request, 'personal_profile/work_criteria.html',
                   context={'form': work_criteria_form})
 
